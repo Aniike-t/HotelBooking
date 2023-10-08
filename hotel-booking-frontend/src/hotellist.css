@@ -1,0 +1,26 @@
+.HeadingHotel{
+    display: flex;
+    margin-top: 20px;
+    align-items: center;
+    justify-content: center;
+}
+
+.hotel-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 columns */
+    gap: 40px; /* Gap between tiles */
+    margin: 20px;
+}
+.hotel-tile {
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    padding: 20px;
+    text-align: center;
+    background-color: #f7f7f7;
+}
+.hotel-tile h2 {
+    margin: 0;
+}
+.hotel-tile button {
+    margin-top: 10px;
+}
