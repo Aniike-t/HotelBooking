@@ -16,6 +16,11 @@ mongoose.connect('mongodb+srv://Aniket:Aryan7738@cluster0.w8e5wlw.mongodb.net/yo
 });
 
 const roomSchema = new mongoose.Schema({
+  roomID: {
+    type: String, // or Number, depending on your preferences
+    unique: true, // Ensures uniqueness of roomIDs
+    required: true, // Requires a roomID for each document
+  },
   title: String,
   description: String,
   price: Number,
@@ -36,7 +41,7 @@ const roomSchema = new mongoose.Schema({
 // Read hotel data from Excel file
 app.get('/hotels', async (req, res) => {
   try {
-    const rooms = await Room.find({}, 'id title price location categories rating').exec();
+    const rooms = await Room.find({}, 'roomID id title price location categories rating').exec();
     console.log(rooms)
     res.json(rooms);
   } catch (error) {
@@ -45,40 +50,18 @@ app.get('/hotels', async (req, res) => {
   }
 });
 
-app.get('/hotels/:id', (req, res) => {
-  const { id } = req.params;
-  const workbook = new excel.Workbook();
-
-  workbook.xlsx.readFile('hotel-database.xlsx')
-    .then((workbook) => {
-      const worksheet = workbook.getWorksheet(1);
-      let hotelData = null;
-
-      worksheet.eachRow((row, rowNumber) => {
-        if (rowNumber !== 1) { // Skip the header row
-          const hotelId = row.getCell(1).value;
-          if (hotelId.toString() === id.toString()) { // Compare as strings
-            hotelData = {
-              id: row.getCell(1).value,
-              name: row.getCell(2).value,
-              price: row.getCell(3).value,
-              availability: row.getCell(5).value,
-              rating: row.getCell(7).value,
-            };
-          }
-        }
-      });
-
-      if (hotelData) {
-        res.json(hotelData);
-      } else {
-        res.status(404).json({ error: 'Hotel not found' });
-      }
-    })
-    .catch((error) => {
-      console.error('Error reading Excel file:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
-    });
+app.get('/hotel/:roomID', async (req, res) => {
+  try {
+    const requestedRoomID = req.params.roomID;
+    const room = await Room.findOne({ roomID: requestedRoomID });
+    if (!room) {
+      return res.status(404).json({ error: 'Room not found' });
+    }
+    res.json(room);
+  } catch (error) {
+    console.error('Error retrieving room data:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
 
 
@@ -121,13 +104,23 @@ app.post('/login', async (req, res) => {
   res.json({ message: 'Login successful' });
 });
 
-
+function generateUniqueRoomID() {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  const length = 6;
+  let roomID = '';
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    roomID += characters[randomIndex];
+  }
+  return roomID;
+}
 
 const Room = mongoose.model('Room', roomSchema);
 app.post('/roomsadd', async (req, res) => {
+  const uniqueRoomID = generateUniqueRoomID();
   console.log(req.body);
   const { title, description, price, amenities, photos, location, sellerphonenumber,categories, address } = req.body;
-  const room = new Room({ title, description, price, amenities, photos, location, sellerphonenumber,categories,address });
+  const room = new Room({ roomID: uniqueRoomID, title, description, price, amenities, photos, location, sellerphonenumber, categories, address });
   try {
     await room.save();
     res.json({ message: 'Room added successfully' });

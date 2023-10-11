@@ -31,7 +31,7 @@ const HotelList = () => {
       <div className="Headinglist">
         <div className="HeadingHotel">
         </div>
-        <section className="category-section">
+        <section id="sectionnavbar" className="category-section">
           {['Villa', 'Cottage', 'Condo', 'Apartment', 'House', 'Mansion'].map((category) => (
             <button
               key={category}
@@ -48,11 +48,10 @@ const HotelList = () => {
             .map((room) => (
               <div key={room.id} className="hotel-tile">
                 <img id="imgcon" src={require("./assets/hotelimg.png")} alt="{`data:image/jpeg;base64,${room.image}`}" height={250}/>
-                <h2>{room.name}</h2>
-                <h2>Price: {room.price}/night</h2>
-                <h4>Rating: {room.rating}</h4>
-                <h4>Loaction: {room.location}</h4>
-                <Link id='roomlink' to={`/hotel/${room.id}`}>Select Hotel</Link>
+                <h2 id="heading2">Price: {room.price}/night</h2>
+                <h4 id="heading3">Rating: {room.rating}</h4>
+                <h4 id="heading3">Loaction: {room.location}</h4>
+                <Link id='roomlink' to={`/hotel/${room.roomID}`}>Select Hotel</Link>
               </div>
             ))}
         </div>

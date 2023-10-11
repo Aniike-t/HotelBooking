@@ -1,44 +1,56 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import Header  from './components/header';
+import './Hoteldetails.css';
+import Header from './components/header';
+import Footer from './components/footer';
 
-const HotelDetails = () => {
-  const { id } = useParams(); // Get the hotel ID from the URL parameter
-  const [hotel, setHotel] = useState(null);
-  console.log(id);
+const RoomDetail = () => {
+  const [room, setRoom] = useState(null);
+  const { roomID } = useParams();
 
   useEffect(() => {
-    // Fetch hotel details based on the 'id' parameter
-    axios.get(`http://localhost:5000/hotels/${id}`) // Replace with your backend URL
+    axios.get(`http://localhost:5000/hotel/${roomID}`)
       .then((response) => {
-        setHotel(response.data);
+        console.log(response.data); // Log the response data
+        setRoom(response.data);
       })
       .catch((error) => {
-        console.error('Error fetching hotel details:', error);
+        console.error('Error fetching room data:', error);
       });
-  }, [id]); // Include 'id' as a dependency to re-fetch when the URL parameter changes
-
-  if (!hotel) {
-    // Loading indicator or error handling can be added here
-    return <div>Loading...</div>;
-  }
+  }, [roomID]);
 
   return (
-    <div >
-      <div>
-        <Header/>
-      </div>
-      <div>
-        <h1>Hotel Details</h1>
-        <h2>Name: {hotel.name}</h2>
-        <h4>Price: {hotel.price}/night</h4>
-        <h4>Rating: {hotel.rating}</h4>
-        <h4>Availability: {hotel.availability}</h4>
-        {/* Add more hotel details as needed */}
-      </div>
+    <div>
+    <div>
+      <Header />
     </div>
+      <div className="room-details">
+        {room ? (
+          <div>
+            <h1 className="room-title">{room.title}</h1>
+            <p className="room-description">Desciption by owner : {room.description}</p>
+            <p className="room-price">Price: ${room.price} per night</p>
+            <p className="room-rating">Rating: {room.rating}</p>
+            <p className="room-location">Location: {room.location}</p>
+            <p className="room-seller-phone">Seller Phone Number: {room.sellerphonenumber}</p>
+            <p className="room-address">Address: {room.address}</p>
+            <h3 className="room-amenities">Amenities:</h3>
+            <ul className="amenities-list">
+              {room.amenities.map((amenity, index) => (
+                <li className="amenity-item" key={index}>{amenity}</li>
+              ))}
+            </ul>
+          </div>
+        ) : (
+          <p className="loading-message">Loading...</p>
+        )}
+      </div>
+      <div>
+          <Footer />
+      </div>
+      </div>
   );
 };
 
-export default HotelDetails;
+export default RoomDetail;

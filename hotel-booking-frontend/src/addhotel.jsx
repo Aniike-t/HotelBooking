@@ -86,7 +86,7 @@ const RoomForm = () => {
   };
 
   return (
-    <div>
+    <div className='AddHotelCon'>
     <div>
         <Header />
     </div>
@@ -108,7 +108,7 @@ const RoomForm = () => {
         className="room-input"
     />
         <textarea
-        name="fulladdress"
+        name="address"
         placeholder="Room's Address"
         value={formData.address}
         onChange={handleChange}
@@ -233,6 +233,11 @@ const RoomForm = () => {
     </label><br />
     {/* Add more category checkboxes as needed */}
     </div>
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
     <div>
     <h3>Location</h3>
     <input

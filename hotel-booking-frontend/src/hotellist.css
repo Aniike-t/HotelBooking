@@ -43,6 +43,7 @@
 }
 
 .category-button {
+    font-size: 16px;
     font-weight: 500;
     background-color: #ffffff;
     border-radius: 10px;
@@ -54,24 +55,36 @@
     cursor: pointer;
     transition: 0.3s ease-in-out;
 }
+.category-button:hover{
+    background-color: rgb(40,44,52);
+    color: white;
+    transition: 0.3s ease-in-out;
+    transform: scale(1.05);
+}
 
 .category-button.active {
-background-color: rgb(40,44,52);
-color: white;
-transition: 0.3s ease-in-out;
+    background-color: rgb(40,44,52);
+    color: white;
+    transition: 0.3s ease-in-out;
+    transform: scale(1.05);
+
 }
 
 .category-section{
-margin-top: -10px;
-background-color: #E6FAFF;
-height: 50px;
+    margin-top: -40px;
+    background-color: #E6FAFF;
+    height: 50px;
 }
 #imgcon{
-border-radius: 15px;
+    width: 90%;
+    margin: 0px 10px;
+    border-radius: 15px;
 }
 #roomlink{
+
+    margin-left: 10px;
     border-radius: 10px;
-    padding: 10px;
+    padding:5px 10px;
     text-decoration: none;
     color: black;
 }
@@ -80,4 +93,17 @@ border-radius: 15px;
     background-color: #454545;
     color:white;
     border-radius: 10px;
+}
+#heading2{
+    font-size: 26px;
+    margin-left: 15px;
+    margin-bottom: 5px;
+}
+#heading3{
+    font-size: 16px;
+    margin-left: 15px;
+    margin-top: 0px;
+}
+#sectionnavbar{
+    background-color: #e6faff;
 }

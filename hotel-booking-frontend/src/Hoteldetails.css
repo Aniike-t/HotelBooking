@@ -1,0 +1,107 @@
+
+  
+  /* Set a background color for the entire page */
+  body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Style the container for room details */
+  .room-details {
+    max-width: 800px;
+    margin-top: 140px;
+    margin-left: 30px;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+  }
+  
+  /* Style the room title */
+  .room-title {
+    font-size: 28px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+  }
+  
+  /* Style the room description */
+  .room-description {
+    font-size: 18px;
+    margin-bottom: 20px;
+    color: #555;
+  }
+  
+  /* Style the room price */
+  .room-price {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #333;
+  }
+  
+  /* Style the room rating */
+  .room-rating {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #e67e22;
+  }
+  
+  /* Style the room location */
+  .room-location {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #333;
+  }
+  
+  /* Style the seller phone number */
+  .room-seller-phone {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #333;
+  }
+  
+  /* Style the categories */
+  .room-categories {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #333;
+  }
+  
+  /* Style the room address */
+  .room-address {
+    font-size: 20px;
+    margin-bottom: 10px;
+    color: #333;
+  }
+  
+  /* Style the amenities heading */
+  .room-amenities {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  /* Style the list of amenities */
+  .amenities-list {
+    list-style: disc;
+    margin-left: 30px;
+    font-size: 18px;
+    color: #555;
+  }
+  
+  /* Style each amenity item */
+  .amenity-item {
+    margin-bottom: 10px;
+    color: #555;
+  }
+  
+  /* Style the loading message */
+  .loading-message {
+    font-size: 24px;
+    margin: 20px;
+    color: #555;
+  }
+  

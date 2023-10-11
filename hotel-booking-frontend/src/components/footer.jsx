@@ -9,7 +9,7 @@ const Footer = () => {
 
       </div>
       <div className="footer-content">
-        {/* Content for the footer */}
+
       </div>
     </footer>
   );

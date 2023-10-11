@@ -1,7 +1,7 @@
 .Header {
     position: fixed;
     top: 0; /* Stick it to the top */
-    height: 90px;
+    height: 60px;
     width: 100vw;
     z-index: 3;
     display: grid;
@@ -14,8 +14,8 @@
   
   .Logo {
     grid-area: logo;
-    height: 40px;
     padding: 10px;
+    height: 40px;
   }
   
   .Nav {
