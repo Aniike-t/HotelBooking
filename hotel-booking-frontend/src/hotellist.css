@@ -16,19 +16,20 @@
 
 .hotel-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 3 columns */
+    grid-template-columns: repeat(4, 1fr); /* 3 columns */
     gap: 40px; /* Gap between tiles */
     margin: 20px;
 }
 .hotel-tile {
+    text-align: left;
+    height: 420px;
     transition: 0.3s ease-in-out;
     transform: scale(1);
     border-radius: 10px;
     border: 0px solid #ccc;
     padding: 20px;
-    text-align: center;
     background-color: #ffffff;
-    border-radius: 17px;
+    border-radius: 20px;
 }
 .hotel-tile h2 {
     margin: 0;
@@ -39,4 +40,44 @@
 .hotel-tile:hover{
     transition: 0.3s ease-in-out;
     transform: scale(1.05);
+}
+
+.category-button {
+    font-weight: 500;
+    background-color: #ffffff;
+    border-radius: 10px;
+    height: 40px;
+    width:100px;
+    padding: 10px 15px;
+    margin: 5px;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s ease-in-out;
+}
+
+.category-button.active {
+background-color: rgb(40,44,52);
+color: white;
+transition: 0.3s ease-in-out;
+}
+
+.category-section{
+margin-top: -10px;
+background-color: #E6FAFF;
+height: 50px;
+}
+#imgcon{
+border-radius: 15px;
+}
+#roomlink{
+    border-radius: 10px;
+    padding: 10px;
+    text-decoration: none;
+    color: black;
+}
+#roomlink:hover{
+    transition: 0.3s ease-in-out;
+    background-color: #454545;
+    color:white;
+    border-radius: 10px;
 }

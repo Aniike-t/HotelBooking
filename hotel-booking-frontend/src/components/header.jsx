@@ -45,7 +45,7 @@ export default function Header() {
         unmountOnExit
       >
         <nav className="Nav">
-          <a href="/">Rent Your Room</a>
+          <a href="/addroom">Rent Your Room</a>
           <a href="/">Your Bookings</a>
           <a href="/">About</a>
           <a href="/">Your Profile</a>
