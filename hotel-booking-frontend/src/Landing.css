@@ -1,0 +1,11 @@
+.container{
+    background-color: rgb(169 188 173);
+}
+#cardborder0shadow{
+    max-width: 300px; margin: auto;
+}
+#link{
+    text-decoration: none;
+    color: black;
+    font-weight: 500;
+}

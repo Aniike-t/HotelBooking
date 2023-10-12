@@ -47,7 +47,7 @@ export default function Header() {
         <nav className="Nav">
           <a href="/addroom">Rent Your Room</a>
           <a href="/">Your Bookings</a>
-          <a href="/">About</a>
+          <a href="/landingpage">About</a>
           <a href="/">Your Profile</a>
         </nav>
       </CSSTransition>
