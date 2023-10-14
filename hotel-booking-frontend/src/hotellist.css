@@ -71,7 +71,7 @@
 }
 
 .category-section{
-    margin-top: -40px;
+    margin-top: -100px;
     background-color: #E6FAFF;
     height: 50px;
 }
@@ -105,4 +105,13 @@
 }
 #sectionnavbar{
     background-color: #e6faff;
+}
+#cardborder0shadow{
+    transition: all 0.3s;
+    padding: 40px 20px 40px 20px;
+    border-radius: 20px;
+}
+#cardborder0shadow:hover{
+    transition: all 0.3s;
+    transform: scale(1.05);
 }

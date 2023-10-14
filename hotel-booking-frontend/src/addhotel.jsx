@@ -1,8 +1,20 @@
 // RoomForm.js
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import './AddHotel.css';
 import Header from './components/header';
 import Footer from './components/footer';
+import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
+
+const containerStyle = {
+  width: '400px',
+  height: '400px'
+};
+
+const center = {
+  lat: -3.745,
+  lng: -38.523
+};
+
 
 const RoomForm = () => {
   const [formData, setFormData] = useState({
@@ -16,6 +28,34 @@ const RoomForm = () => {
     categories: [],
     address:'',
   });
+  
+
+  const { isLoaded, loadError } = useJsApiLoader({
+    id: 'google-map-script',
+    googleMapsApiKey: "AIzaSyAqpVVN3RLo2hb_Q0T4ZjFpZURRK9-AnGg" // Replace with your Google Maps API key
+  });
+
+  const [map, setMap] = useState(null);
+
+
+  const onLoad = React.useCallback(function callback(map) {
+    setMap(map);
+
+    // Once the map is loaded, you can call fitBounds
+    if (map) {
+      const bounds = new window.google.maps.LatLngBounds(center);
+      map.fitBounds(bounds);
+    }
+  }, []);
+
+  const onUnmount = React.useCallback(function callback() {
+    setMap(null);
+  }, []);
+
+  if (loadError) {
+    console.error('Error loading Google Maps:', loadError);
+  }
+
 
   const handleCategoryChange = (e) => {
     const { name, value, checked } = e.target;
@@ -249,6 +289,18 @@ const RoomForm = () => {
         className="room-input"
     />
     </div>
+    {isLoaded ? (
+        <GoogleMap
+          mapContainerStyle={containerStyle}
+          center={center}
+          zoom={10}
+        >
+          {/* Child components, such as markers, info windows, etc. */}
+          <></>
+        </GoogleMap>
+      ) : (
+        <p>Loading Map...</p>
+      )}
 
     <button type="submit" className="submit-button">Add Room</button>
     </form>

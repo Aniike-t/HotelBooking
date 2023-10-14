@@ -29,12 +29,17 @@ const RoomDetail = () => {
         {room ? (
           <div>
             <h1 className="room-title">{room.title}</h1>
-            <p className="room-description">Desciption by owner : {room.description}</p>
+            <hr></hr>
+            
             <p className="room-price">Price: ${room.price} per night</p>
             <p className="room-rating">Rating: {room.rating}</p>
+            <hr></hr>
+            <p className="room-address">Address: {room.address}</p>
+            <p className="room-description">Desciption by owner : {room.description}</p>
+            <hr></hr>
             <p className="room-location">Location: {room.location}</p>
             <p className="room-seller-phone">Seller Phone Number: {room.sellerphonenumber}</p>
-            <p className="room-address">Address: {room.address}</p>
+            <hr></hr>
             <h3 className="room-amenities">Amenities:</h3>
             <ul className="amenities-list">
               {room.amenities.map((amenity, index) => (

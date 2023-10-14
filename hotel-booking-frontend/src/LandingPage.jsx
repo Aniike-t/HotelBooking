@@ -1,9 +1,14 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import './Landing.css';
 import 'bootstrap/dist/css/bootstrap.css';
+import { useTypingText } from "./components/TypingEffect";
 
 function LandingPage() {
-    const [count, setCount] = useState(0);
+    const { word, stop, start } = useTypingText(
+        ['Villa', 'Cottage', 'Condo', 'Apartment', 'House', 'Mansion'],
+        130,
+        20
+      );
 
     return (
         <div>
@@ -137,9 +142,10 @@ function LandingPage() {
 
         {/* Check point */}
 
-            <div className="container">
-                <h2>Find our perfect hotel you stay</h2>
-                <h6>There's No Place Else We'd Rather Be</h6>
+            <div id="firstcon" >
+                <h2>Find Your Perfect Hotel You Stay</h2>
+                <h2>You Find It, We Got It</h2>
+                <h2>{word}</h2>
                 <br />
                 <br />
 
@@ -164,21 +170,24 @@ function LandingPage() {
                     </div>
                 </div>
             </div>
-
+            <hr></hr>
+            <div id="secondcon">
+                <h2>Featured</h2>
+            </div>
 
             <div>
             {/* Our Rooms */}
             <div className="container" />
                 <div className="row">
 
-                    <div class="col-lg-4 col-md-6 ny-3">
-                        <div id="cardborder0shadow" class="card border-0 shadow" >
-                            <img src={require("./assets/hotelimg.png")} class="card-img-top" height={200}></img>
+                    <div id="cardcon" class="col-lg-3 col-md-6 ny-3">
+                        <div  id="cardborder0shadow" class="card border-0 shadow" >
+                            <img src={require("./assets/hotelimg.png")} class="card-img-top" ></img>
                             <div class="card-body"> 
                                 <h5> Room </h5>
                                 <h6 class="mb-4">₹2500 per night</h6>
                                 <div class="features mb-4">
-                                    <h6 class="mb-1">Features</h6>
+                                    <h6 class="mb-1">Basics</h6>
                                     <span class="badge rounded-pill bg-light text-dark text-wrap">
                                     2 Rooms
                                     </span>
@@ -193,7 +202,7 @@ function LandingPage() {
                                     </span>
                                 </div>
                                 <div class="features mb-4">
-                                    <h6 class="mb-1">Features</h6>
+                                    <h6 class="mb-1">Amenities</h6>
                                     <span class="badge rounded-pill bg-light text-dark text-wrap">
                                     AC
                                     </span>
@@ -226,7 +235,7 @@ function LandingPage() {
                     </div>
 
 
-                    <div class="col-lg-4 col-md-6 ny-3">
+                    <div id="cardcon" class="col-lg-3 col-md-6 ny-3">
                         <div id="cardborder0shadow" class="card border-0 shadow" >
                             <img src={require("./assets/hotelimg.png")} class="card-img-top"></img>
                             <div class="card-body"> 
@@ -275,7 +284,7 @@ function LandingPage() {
                     </div>	
 
 
-                    <div class="col-lg-4 col-md-6 ny-3">
+                    <div id="cardcon" class="col-lg-3 col-md-6 ny-3">
                         <div id="cardborder0shadow" class="card border-0 shadow" >
                             <img src={require("./assets/hotelimg.png")} class="card-img-top"></img>
                             <div class="card-body"> 

@@ -8,4 +8,40 @@
     text-decoration: none;
     color: black;
     font-weight: 500;
+    font-size: 20px;
+    padding: 10px;
+    transition: all 0.4s;
+    border-radius: 5px;
+}
+#link:hover{
+    transition: all 0.4s;
+    color: azure;
+    background-color: black;
+    padding: 10px 20px 10px 20px;
+    border-radius: 5px;
+}
+#firstcon{
+    width:100%;
+    height: 400px;
+    padding: 30px;
+    margin-bottom: 50px;
+}
+
+#cardborder0shadow img{
+    height:200px;
+}
+#firstcon h2{
+    font-size: 46px;
+    font-weight: bolder;
+    margin-top: 10px;
+}
+#cardcon{
+    margin-top: -100px;
+    border-radius: 0px;
+}
+#secondcon h2{
+    margin-left: 30px;
+    font-size: 46px;
+    font-weight: bolder;
+    margin-top: 10px;
 }
