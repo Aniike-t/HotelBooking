@@ -1,11 +1,10 @@
-// Login.js
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useHistory } from 'react-router-dom'; // Import useHistory
+import { useNavigate } from 'react-router-dom';
 
-const Login = ({ history }) => {
+const Signin = () => {
   const [formData, setFormData] = useState({
-    email: '',
+    username: '',
     password: '',
   });
 
@@ -14,17 +13,26 @@ const Login = ({ history }) => {
     setFormData({ ...formData, [name]: value });
   };
 
+  const navigate = useNavigate();
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/login', formData);
-      console.log(response.data);
-      // Redirect to the dashboard or user profile page after successful login
-      history.push('/homepage');
-      // You can implement this logic based on your application requirements
+      const response = await axios.post('http://localhost:5000/login', {
+        username: formData.username,
+        password: formData.password,
+      });
+      if (response.status === 200) {
+        // Login successful, store username in local storage
+        localStorage.setItem('username', formData.username);
+        navigate('/');
+        console.log('Login successful');
+      } else {
+        console.error('Login failed');
+      }
     } catch (error) {
       console.error('Error:', error.response ? error.response.data : error.message);
-      // Handle login errors, display error message, etc.
     }
   };
 
@@ -33,10 +41,10 @@ const Login = ({ history }) => {
       <h2>Login</h2>
       <form onSubmit={handleSubmit}>
         <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={formData.email}
+          type="text"
+          name="username"
+          placeholder="Username"
+          value={formData.username}
           onChange={handleChange}
         />
         <input
@@ -52,4 +60,4 @@ const Login = ({ history }) => {
   );
 };
 
-export default Login;
+export default Signin;

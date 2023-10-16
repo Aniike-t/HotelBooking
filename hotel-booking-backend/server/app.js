@@ -4,15 +4,60 @@ const mongoose =require('mongoose');
 const app = express();
 const port = 5000;
 const bcrypt = require('bcrypt');
+const cookieParser = require('cookie-parser');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const userController = require('./userController');
 
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
+
+
+
+// Signup route
+app.post('/signup', userController.signup);
+
+// Login route
+app.post('/login', userController.login);
+
 
 mongoose.connect('mongodb+srv://Aniket:Aryan7738@cluster0.w8e5wlw.mongodb.net/your_database', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
+
+passport.use(
+  new LocalStrategy(async (username, password, done) => {
+    try {
+      // Find the user in your database using the provided 'username'
+      const user = await User.findOne({ email: username });
+
+      // If the user is not found, return an error
+      if (!user) {
+        return done(null, false, { message: 'User not found' });
+      }
+
+      // Check if the provided 'password' matches the user's password
+      const passwordMatch = await user.comparePassword(password);
+
+      // If the password doesn't match, return an error
+      if (!passwordMatch) {
+        return done(null, false, { message: 'Incorrect password' });
+      }
+
+      // If the user and password are valid, return the user object
+      return done(null, user);
+    } catch (error) {
+      // If an error occurs during authentication, return the error
+      return done(error);
+    }
+  })
+);
+
+
+
 
 const roomSchema = new mongoose.Schema({
   roomID: {
@@ -37,7 +82,7 @@ const roomSchema = new mongoose.Schema({
 
 
 
-// Read hotel data from Excel file
+// Read hotel data from Mongo
 app.get('/hotels', async (req, res) => {
   try {
     const rooms = await Room.find({}, 'roomID id title price location categories rating').exec();
@@ -63,45 +108,6 @@ app.get('/hotel/:roomID', async (req, res) => {
   }
 });
 
-
-
-
-
-const userSchema = new mongoose.Schema({
-  username: String,
-  email: String,
-  password: String,
-});
-
-const User = mongoose.model('User', userSchema);
-
-app.post('/signup', async (req, res) => {
-  const { username, email, password } = req.body;
-  // Check if the username or email already exists
-  const existingUser = await User.findOne({ $or: [{ username }, { email }] });
-  if (existingUser) {
-    return res.status(400).json({ message: 'Username or email already exists' });
-  }
-  const hashedPassword = await bcrypt.hash(password, 10);
-
-  // Create a new user document and save it to MongoDB
-  const newUser = new User({ username, email, password: hashedPassword });
-  await newUser.save();
-  res.json({ message: 'User registered successfully' });
-});
-
-app.post('/login', async (req, res) => {
-  const { email, password } = req.body;
-  const user = await User.findOne({ email });
-  if (!user) {
-    return res.status(401).json({ message: 'User not found' });
-  }
-  const passwordMatch = await bcrypt.compare(password, user.password);
-  if (!passwordMatch) {
-    return res.status(401).json({ message: 'Incorrect password' });
-  }
-  res.json({ message: 'Login successful' });
-});
 
 function generateUniqueRoomID() {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';

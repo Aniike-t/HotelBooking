@@ -9,11 +9,20 @@ import 'bootstrap/dist/css/bootstrap.css';
 const HotelList = () => {
   const [rooms, setRooms] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
-
   const handleCategoryClick = (category) => {
     setSelectedCategory(category);
   };
+  const [username, setUsername] = useState('');
 
+  useEffect(() => {
+    // Retrieve the username from localStorage
+    const storedUsername = localStorage.getItem('username');
+    if (storedUsername) {
+      setUsername(storedUsername);
+    }
+  }, []);
+
+  
   useEffect(() => {
     axios.get('http://localhost:5000/hotels')
       .then((response) => {
@@ -27,6 +36,9 @@ const HotelList = () => {
   return (
     <div className="body">
       <div>
+      <div>
+        {username && <p>Welcome, {username}!</p>}
+      </div>
         <Header />
       </div>
       <div className="Headinglist">

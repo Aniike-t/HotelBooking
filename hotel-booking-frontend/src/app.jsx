@@ -1,14 +1,14 @@
 
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import HotelList from './HotelList.jsx'; // Import your HotelList component
+import HotelList from './HotelList.jsx';
 import HotelDetail from './HotelDetails.jsx'
-import Signup from './Register.jsx';
-import Login from './Login.jsx';
-import { useHistory } from 'react-router-dom'; // Import useHistory
+import { useHistory } from 'react-router-dom';
 import RoomForm from './addhotel.jsx'
 import LandingPage from './LandingPage.jsx';
-//<Route path="/homepage" element={< LandingPage/>} />
+import Signin from './Login.jsx';
+import Signup from './Register.jsx';
+
 
 function App() {
   return (
@@ -16,9 +16,10 @@ function App() {
       <Routes>
         <Route path="/" element={<HotelList />} />
         <Route path="/hotel/:roomID" element={<HotelDetail />} />
-        <Route path="/register" element={<Login />} />
+        <Route path="/register" element={<Signup />} />
         <Route path='/landingPage' element={<LandingPage/>}></Route>
         <Route path="/addroom" element={< RoomForm/>} />
+        <Route path="/login" element={<Signin />} />
       </Routes>
     </Router>
   );
