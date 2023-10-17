@@ -17,8 +17,8 @@ function App() {
         <Route path="/" element={<HotelList />} />
         <Route path="/hotel/:roomID" element={<HotelDetail />} />
         <Route path="/register" element={<Signup />} />
-        <Route path='/landingPage' element={<LandingPage/>}></Route>
-        <Route path="/addroom" element={< RoomForm/>} />
+        <Route path="/landingPage" element={<LandingPage/>} />
+        <Route path="/addroom" element={<RoomForm />} />
         <Route path="/login" element={<Signin />} />
       </Routes>
     </Router>

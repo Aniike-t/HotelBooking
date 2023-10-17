@@ -45,3 +45,12 @@
     font-weight: bolder;
     margin-top: 10px;
 }
+a{
+    text-decoration: none;
+}
+.loginregistertag{
+    color: black;
+}
+.loginregistertag:hover{
+    color: white;
+}

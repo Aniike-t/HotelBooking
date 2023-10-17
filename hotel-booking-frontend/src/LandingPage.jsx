@@ -2,8 +2,21 @@ import { useState, useEffect } from "react";
 import './Landing.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import { useTypingText } from "./components/TypingEffect";
+import { useNavigate } from 'react-router-dom';
 
 function LandingPage() {
+    const scrollToLoginSection = () => {
+        const loginSection = document.getElementById('loginsection');
+        
+        if (loginSection) {
+          loginSection.scrollIntoView({ behavior: 'smooth' });
+        }
+      };
+
+    const GoToRegisterPage = () => {
+        const navigate = useNavigate();
+        navigate('/register')
+    }
     const { word, stop, start } = useTypingText(
         ['Villa', 'Cottage', 'Condo', 'Apartment', 'House', 'Mansion'],
         130,
@@ -38,10 +51,10 @@ function LandingPage() {
                             </li>
                         </ul>
                         <form className="d-flex">
-                            <button type="button" className="btn btn-outline-dark shadow-none me-lg-3 me-2" data-bs-toggle="modal" data-bs-target="#loginModal">
+                            <button type="button" className="btn btn-outline-dark shadow-none me-lg-3 me-2" data-bs-toggle="modal" data-bs-target="#loginModal"  onClick={scrollToLoginSection}>
                                 Login
                             </button>
-                            <button type="button" className="btn btn-outline-dark shadow-none " data-bs-toggle="modal" data-bs-target="#registerModal">
+                            <button type="button" className="btn btn-outline-dark shadow-none " data-bs-toggle="modal" data-bs-target="#registerModal" onClick={GoToRegisterPage}>
                                 Register
                             </button>
                         </form>
@@ -338,6 +351,11 @@ function LandingPage() {
                         </div>
                     </div>
                 </div>
+
+                <div id="loginsection">
+                    {/* Login Section goes here  */}
+                </div>
+                
             </div>
             </div>	
         );}

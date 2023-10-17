@@ -48,7 +48,33 @@ const RoomDetail = () => {
             </ul>
           </div>
         ) : (
-          <p className="loading-message">Loading...</p>
+          <p className="loading-message">
+              <section class="loader">
+                <div>
+                  <div>
+                    <span class="one h6"></span>
+                    <span class="two h3"></span>
+                  </div>
+                </div>
+
+                <div>
+                  <div>
+                    <span class="one h1"></span>
+                  </div>
+                </div>
+
+                <div>
+                  <div>
+                    <span class="two h2"></span>
+                  </div>
+                </div>
+                <div>
+                  <div>
+                    <span class="one h4"></span>
+                  </div>
+                </div>
+              </section>
+          </p>
         )}
       </div>
       <div>
