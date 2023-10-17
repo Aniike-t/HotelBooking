@@ -8,7 +8,7 @@ import RoomForm from './addhotel.jsx'
 import LandingPage from './LandingPage.jsx';
 import Signin from './Login.jsx';
 import Signup from './Register.jsx';
-
+import RotatingModel from './components/RotatingRoom.jsx';
 
 function App() {
   return (
@@ -20,6 +20,7 @@ function App() {
         <Route path="/landingPage" element={<LandingPage/>} />
         <Route path="/addroom" element={<RoomForm />} />
         <Route path="/login" element={<Signin />} />
+        <Route path="/rotatingModel" element={<RotatingModel />} />
       </Routes>
     </Router>
   );

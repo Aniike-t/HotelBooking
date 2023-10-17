@@ -5,22 +5,30 @@ import { Link } from 'react-router-dom';
 import Header from './components/header.jsx';
 import Footer from './components/footer.jsx';
 import 'bootstrap/dist/css/bootstrap.css';
+import { useNavigate } from 'react-router-dom';
 
 const HotelList = () => {
   const [rooms, setRooms] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
-  
+  const navigate = useNavigate()
+
   const handleCategoryClick = (category) => {
     console.log('Selected category:', category);
     setSelectedCategory(category);
   };
   const [username, setUsername] = useState('');
 
+
+
+  //If username exist well n good , if doesnt redirect to login page
   useEffect(() => {
     // Retrieve the username from localStorage
     const storedUsername = localStorage.getItem('username');
     if (storedUsername) {
       setUsername(storedUsername);
+    }
+    else{
+      navigate('/login')
     }
   }, []);
 

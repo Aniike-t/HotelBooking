@@ -3,8 +3,19 @@ import './Landing.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import { useTypingText } from "./components/TypingEffect";
 import { useNavigate } from 'react-router-dom';
+import RotatingModel from "./components/RotatingRoom";
 
 function LandingPage() {
+    const navigate = useNavigate();
+
+    if (localStorage.getItem('username')) {
+        // Remove the item from local storage
+        localStorage.removeItem('username');
+        console.log(`Item removed from local storage.`);
+    } else {
+        console.log(`Item does not exist in local storage.`);
+    }
+
     const scrollToLoginSection = () => {
         const loginSection = document.getElementById('loginsection');
         
@@ -14,7 +25,6 @@ function LandingPage() {
       };
 
     const GoToRegisterPage = () => {
-        const navigate = useNavigate();
         navigate('/register')
     }
     const { word, stop, start } = useTypingText(
