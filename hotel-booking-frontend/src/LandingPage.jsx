@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import { useTypingText } from "./components/TypingEffect";
 import { useNavigate } from 'react-router-dom';
 import RotatingModel from "./components/RotatingRoom";
+import GlbViewer from './components/RotatingRoom.jsx';
 
 function LandingPage() {
     const navigate = useNavigate();
@@ -359,6 +360,17 @@ function LandingPage() {
                                 </div>
                             </div>	
                         </div>
+                    </div>
+                </div>
+                <br></br>
+                <br></br>
+                <hr></hr>
+                <div style={{ display: 'flex' }}>
+                    <div id="rotating-model" style={{ flex: 1 }}>
+                        <GlbViewer />
+                    </div>
+                    <div id="rotatingcon-info" style={{ flex: 1, textAlign:"flex-start" ,padding: "20px" }}>
+                        <h1>Hotel</h1>
                     </div>
                 </div>
 
