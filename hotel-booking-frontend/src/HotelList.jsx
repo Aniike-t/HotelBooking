@@ -18,11 +18,7 @@ const HotelList = () => {
   };
   const [username, setUsername] = useState('');
 
-
-
-  //If username exist well n good , if doesnt redirect to login page
   useEffect(() => {
-    // Retrieve the username from localStorage
     const storedUsername = localStorage.getItem('username');
     if (storedUsername) {
       setUsername(storedUsername);
@@ -31,7 +27,6 @@ const HotelList = () => {
       navigate('/login')
     }
   }, []);
-
 
 
   useEffect(() => {
@@ -47,9 +42,6 @@ const HotelList = () => {
   return (
     <div className="body">
       <div>
-      <div>
-        {username && <p>Welcome, {username}!</p>}
-      </div>
         <Header />
       </div>
       <div className="Headinglist">
@@ -81,7 +73,7 @@ const HotelList = () => {
                       <h2 id="heading2">Price: {room.price}/night</h2>
                       <h4 id="heading3">Rating: {room.rating}</h4>
                       <h4 id="heading3">Location: {room.location}</h4>
-                      <Link id="roomlink" to={`/hotel/${room.roomID}`}>Book Now
+                      <Link id="roomlink" to={`/hotel/${room.roomID}`}> <t></t> Book Now
                       </Link>
                     </div>
                   </div>
@@ -107,7 +99,6 @@ const HotelList = () => {
                 ))
               )}
             </div>
-
       </div>
       <div>
         <Footer />

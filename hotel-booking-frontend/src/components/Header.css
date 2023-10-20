@@ -1,8 +1,6 @@
 .Header {
     position: fixed;
     top: 0; /* Stick it to the top */
-    height: 60px;
-    width: 100vw;
     z-index: 3;
     display: grid;
     grid-template-areas: "logo nav";
@@ -11,7 +9,6 @@
     background-color: #282c34;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   }
-  
   .Logo {
     grid-area: logo;
     padding: 10px;

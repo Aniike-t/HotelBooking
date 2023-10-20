@@ -169,6 +169,9 @@
     -webkit-animation: shine-loading-container-items 2s infinite ease-out;
             animation: shine-loading-container-items 2s infinite ease-out;
   }
+  button{
+    text-align: center;
+  }
   
   .movie--isloading .loading-content .loading-sub-text {
     height: 10px;

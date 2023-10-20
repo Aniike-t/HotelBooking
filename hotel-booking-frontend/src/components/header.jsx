@@ -6,8 +6,8 @@ export default function Header() {
 
   return (
         <div>
-            <nav className="navbar navbar-expand-lg navbar-light bg-light bg-white px-lg-3 py-lg-2shadow-sm sticky top ">
-                <div className="container-fluid">
+            <nav  className="navbar navbar-expand-lg navbar-light bg-light bg-white px-lg-3 py-lg-2shadow-sm sticky top ">
+                <div  className="container-fluid">
                     <a className="navbar-brand me-5 fw-bold fs-3 h-font" href="index.html">HOTEL</a>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span className="navbar-toggler-icon"></span>

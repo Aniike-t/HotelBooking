@@ -8,15 +8,15 @@ const Model = ({ gltf }) => {
 
   useFrame(() => {
     if (gltfRef.current) {
-      gltfRef.current.rotation.x += 0; // Adjust the rotation speed as needed
-      gltfRef.current.rotation.y += 0.00075;
+      gltfRef.current.rotation.x += 0.00001; // Adjust the rotation speed as needed
+      gltfRef.current.rotation.y -= 0.0002;
     }
   });
 
   return (
-    <group ref={gltfRef} scale={[0.0085, 0.0085, 0.0085]}> {/* Scale the model down */}
-      <primitive object={gltf.scene}>
-        <mesh visible={false} />
+    <group ref={gltfRef} scale={[0.030, 0.040, 0.030]}> {/* Scale the model down */}
+      <primitive object={gltf.scene} receiveShadow castShadow> {/* Add shadows */}
+        <meshPhysicalMaterial color="yellow" metalness={0.2} roughness={1} />
       </primitive>
     </group>
   );
@@ -33,12 +33,12 @@ const GlbViewer = () => {
   }, []);
 
   return (
-    <div style={{ height: '90vmin', width: '90vmin' }}>
-      <Canvas camera={{ position: [0, 0, 5] }} style={{ margin : '0 auto' }}>
-        <ambientLight intensity={1.2} />
-        <pointLight position={[0, 0, 0]} />
+    <div style={{ height: '80vmin', width: '80vmin' }}>
+      <Canvas camera={{ position: [10, 10, 5] }} style={{ margin : '100px auto' }}>
+        <ambientLight intensity={0.8} /> {/* Add some ambient lighting */}
+        <pointLight position={[0, 0, 0]} intensity={1} castShadow /> {/* Add a point light for more realistic lighting */}
         {gltf && <Model gltf={gltf} />}
-        <OrbitControls />
+        <OrbitControls enableDamping={false} enableZoom={false} enableRotate={true} />
       </Canvas>
     </div>
   );
