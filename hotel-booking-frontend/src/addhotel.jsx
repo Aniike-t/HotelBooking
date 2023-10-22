@@ -1,22 +1,17 @@
 // RoomForm.js
-import React, { useState,useEffect } from 'react';
+import React, { useState,useEffect,useRef } from 'react';
 import './AddHotel.css';
 import Header from './components/header';
 import Footer from './components/footer';
-import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
-
-const containerStyle = {
-  width: '400px',
-  height: '400px'
-};
-
-const center = {
-  lat: -3.745,
-  lng: -38.523
-};
-
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+import markerIcon from './assets/mark.png'; // Import the image
+import imageCompression from 'browser-image-compression';
 
 const RoomForm = () => {
+
+  const [markerPlaced, setMarkerPlaced] = useState(false);
+  const [infoFilled, setinfoFilled] =useState(false);
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -27,35 +22,12 @@ const RoomForm = () => {
     sellerphonenumber:'',
     categories: [],
     address:'',
+    latitude: '',
+    longitude: '',
   });
-  
-
-  const { isLoaded, loadError } = useJsApiLoader({
-    id: 'google-map-script',
-    googleMapsApiKey: "AIzaSyAqpVVN3RLo2hb_Q0T4ZjFpZURRK9-AnGg" // Replace with your Google Maps API key
-  });
-
-  const [map, setMap] = useState(null);
-
-
-  const onLoad = React.useCallback(function callback(map) {
-    setMap(map);
-
-    // Once the map is loaded, you can call fitBounds
-    if (map) {
-      const bounds = new window.google.maps.LatLngBounds(center);
-      map.fitBounds(bounds);
-    }
-  }, []);
-
-  const onUnmount = React.useCallback(function callback() {
-    setMap(null);
-  }, []);
-
-  if (loadError) {
-    console.error('Error loading Google Maps:', loadError);
-  }
-
+  useEffect(() => {
+    console.log(formData); // This will log the updated formData
+  }, [formData]);
 
   const handleCategoryChange = (e) => {
     const { name, value, checked } = e.target;
@@ -96,34 +68,139 @@ const RoomForm = () => {
     setFormData({ ...formData, amenities: updatedAmenities });
   };
 
-  const handlePhotoChange = (e) => {
+  const handlePhotoChange = async (e) => {
     const photos = e.target.files;
-    const photoUrls = Array.from(photos).map((photo) => URL.createObjectURL(photo));
-    setFormData({ ...formData, photos: photoUrls });
+    const photoStrings = [];
+  
+    // Configuration for image compression
+    const options = {
+      maxSizeMB: 0.2, // Adjust the compression size as needed
+      maxWidthOrHeight: 800, // Adjust the dimensions as needed
+    };
+  
+    // Iterate through the selected photos
+    for (let i = 0; i < photos.length; i++) {
+      const photo = photos[i];
+  
+      try {
+        // Compress the image using the imageCompression library
+        const compressedPhoto = await imageCompression(photo, options);
+  
+        // Convert the compressed image to a base64 string
+        const reader = new FileReader();
+  
+        reader.onload = (event) => {
+          // When the reader is done, add the base64 string to the array
+          photoStrings.push(event.target.result);
+  
+          // Check if all photos have been processed
+          if (photoStrings.length === photos.length) {
+            // Now you have an array of base64-encoded image strings
+            // You can set this in your form data or send it to the backend.
+            setFormData({ ...formData, photos: photoStrings });
+          }
+        };
+  
+        // Read the compressed image as a Data URL (base64)
+        reader.readAsDataURL(compressedPhoto);
+      } catch (error) {
+        console.error('Error compressing image:', error);
+      }
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await fetch('http://localhost:5000/roomsadd', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-      alert(response.data.message);
-
-      if (response.ok) {
-        console.log('Room added successfully');
-
-      } else {
-        console.error('Error:', response.statusText);
+    const requiredFields = ['title', 'description', 'price', 'location', 'sellerphonenumber', 'categories', 'address', 'latitude', 'longitude'];
+    for (const field of requiredFields) {
+      if (!formData[field]) {
+        alert(`Please fill in the ${field} field.`);
+        return;
       }
-    } catch (error) {
-      console.error('Error:', error);
+      else{
+        setinfoFilled(true);
+      }
+    }
+    
+    if (!markerPlaced) {
+      alert('Please place a marker on the map');
+      return;
+    }
+    if(infoFilled){
+      try {
+        const response = await fetch('http://localhost:5000/roomsadd', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formData),
+        });
+        alert(response.data.message);
+        if (response.ok) {
+          console.log('Room added successfully');
+        } else {
+          console.error('Error:', response.statusText);
+        }
+      } catch (error) {
+        console.error('Error:', error);
+      }
     }
   };
+
+  const mapRef = useRef(null);
+  const pinRef = useRef(null);
+  const [lat, setLat] = useState(40);
+  const [lng, setLng] = useState(0);
+
+  
+  
+  useEffect(() => {
+    // Initialize map
+    if (!mapRef.current) {
+      mapRef.current = L.map('map', {
+        center: [lat, lng],
+        zoom: 3,
+      });
+
+      // Create the tile layer with correct attribution
+      L.tileLayer('https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {
+        attribution:
+          '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, Tiles courtesy of <a href="http://hot.openstreetmap.org/" target="_blank">Humanitarian OpenStreetMap Team</a>',
+        maxZoom: 19,
+      }).addTo(mapRef.current);
+    }
+
+    // Event listener for map click
+    mapRef.current.on('click', (ev) => {
+      setLat(ev.latlng.lat);
+      setLng(ev.latlng.lng);
+      setFormData((prevFormData) => ({
+        ...prevFormData,
+        latitude: ev.latlng.lat,
+        longitude: ev.latlng.lng,
+      }));
+      setMarkerPlaced(true);
+      if (!pinRef.current) {
+        pinRef.current = L.marker(ev.latlng, {
+          icon: L.icon({
+            iconUrl:  markerIcon, // Replace with the correct path
+            iconSize: [41, 41],
+            iconAnchor: [12, 41],
+          }),
+          riseOnHover: true,
+          draggable: true,
+        });
+        pinRef.current.addTo(mapRef.current);
+        pinRef.current.on('drag', (ev) => {
+          setLat(ev.latlng.lat);
+          setLng(ev.latlng.lng);
+        });
+      } else {
+        pinRef.current.setLatLng(ev.latlng);
+      }
+    });
+  }, [lat, lng]);
+
 
   return (
     <div className='AddHotelCon'>
@@ -289,21 +366,12 @@ const RoomForm = () => {
         className="room-input"
     />
     </div>
-    {isLoaded ? (
-        <GoogleMap
-          mapContainerStyle={containerStyle}
-          center={center}
-          zoom={10}
-        >
-          {/* Child components, such as markers, info windows, etc. */}
-          <></>
-        </GoogleMap>
-      ) : (
-        <p>Loading Map...</p>
-      )}
+
+    <div id="map" style={{ height: '70vh', width: '100%' }}></div>
 
     <button type="submit" className="submit-button">Add Room</button>
     </form>
+
     <div>
         <Footer />
     </div>

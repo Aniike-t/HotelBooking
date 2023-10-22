@@ -4,6 +4,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import { useTypingText } from "./components/TypingEffect";
 import { useNavigate } from 'react-router-dom';
 import GlbViewer from './components/RotatingRoom.jsx';
+import Signin from "./components/LoginComponent";
 
 function LandingPage() {
     const navigate = useNavigate();
@@ -268,12 +269,9 @@ function LandingPage() {
 
                 <div className="section1" style={{backgroundColor:"#EAEAE6",padding:"30px",borderRadius:"50px",width:"95vw",marginLeft:"2.5vw",marginBottom:"10px"}}>
                     <div id="loginsection">
-                        {/* Login Section goes here  */}
+                        <Signin />
                     </div>
                 </div>
-
-                
-            
             </div>	
         );}
 

@@ -11,6 +11,7 @@ const HotelList = () => {
   const [rooms, setRooms] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
   const navigate = useNavigate()
+  const [selectedSortOption, setSelectedSortOption] = useState('priceLowToHigh'); // Default sorting option
 
   const handleCategoryClick = (category) => {
     console.log('Selected category:', category);
@@ -28,6 +29,28 @@ const HotelList = () => {
     }
   }, []);
 
+  const handleSortChange = (e) => {
+    setSelectedSortOption(e.target.value);
+    
+    // Sort the original 'rooms' array and store it back in 'rooms'
+    const sortedRooms = sortRooms([...rooms], e.target.value);
+    setRooms(sortedRooms);
+  };
+
+  const sortRooms = (rooms, sortOption) => {
+    switch (sortOption) {
+      case 'priceLowToHigh':
+        return rooms.slice().sort((a, b) => a.price - b.price);
+      case 'priceHighToLow':
+        return rooms.slice().sort((a, b) => b.price - a.price);
+      case 'ratingHighToLow':
+        return rooms.slice().sort((a, b) => b.rating - a.rating);
+      case 'ratingLowToHigh':
+        return rooms.slice().sort((a, b) => a.rating - b.rating);
+      default:
+        return rooms;
+    }
+  };
 
   useEffect(() => {
     axios.get('http://localhost:5000/hotels')
@@ -45,6 +68,19 @@ const HotelList = () => {
         <Header />
       </div>
       <div className="Headinglist">
+          <div className="sort-dropdown">
+              <label htmlFor="sortOptions">Sort By: </label>
+              <select
+                id="sortOptions"
+                value={selectedSortOption}
+                onChange={handleSortChange}
+              >
+                <option value="priceLowToHigh">Price Low to High</option>
+                <option value="priceHighToLow">Price High to Low</option>
+                <option value="ratingHighToLow">Rating High to Low</option>
+                <option value="ratingLowToHigh">Rating Low to High</option>
+              </select>
+            </div>
         <div className="HeadingHotel">
         </div>
         <section id="sectionnavbar" className="category-section">
@@ -66,7 +102,7 @@ const HotelList = () => {
                     <div id="cardborder0shadow" className="card border-0 shadow">
                       <img
                         id="imgcon"
-                        src={require("./assets/hotelimg.png")}
+                        src={room.photos}
                         alt="{`data:image/jpeg;base64,${room.image}`}"
                         height={250}
                       />

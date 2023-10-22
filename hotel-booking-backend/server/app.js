@@ -78,6 +78,8 @@ const roomSchema = new mongoose.Schema({
   },
   categories: [String],
   address: String,
+  latitude: Number,  // Add latitude as a Number field
+  longitude: Number, // Add longitude as a Number field
 });
 
 
@@ -85,7 +87,21 @@ const roomSchema = new mongoose.Schema({
 // Read hotel data from Mongo
 app.get('/hotels', async (req, res) => {
   try {
-    const rooms = await Room.find({}, 'roomID id title price location categories rating').exec();
+    const roomsWithFirstPhotos = await Room.find({}, 'roomID id title price location categories rating photos').exec();
+
+    const rooms = roomsWithFirstPhotos.map((room) => {
+      return {
+        roomID: room.roomID,
+        id: room.id,
+        title: room.title,
+        price: room.price,
+        location: room.location,
+        categories: room.categories,
+        rating: room.rating,
+        photos: room.photos.length > 0 ? room.photos[0] : null, // Get the first photo
+      };
+    });
+
     console.log(rooms)
     res.json(rooms);
   } catch (error) {

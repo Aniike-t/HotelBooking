@@ -5,7 +5,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 export default function Header() {
 
   return (
-        <div>
+        <div id="Header">
             <nav  className="navbar navbar-expand-lg navbar-light bg-light bg-white px-lg-3 py-lg-2shadow-sm sticky top ">
                 <div  className="container-fluid">
                     <a className="navbar-brand me-5 fw-bold fs-3 h-font" href="index.html">HOTEL</a>
