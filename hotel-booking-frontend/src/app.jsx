@@ -9,6 +9,8 @@ import LandingPage from './LandingPage.jsx';
 import Signin from './Login.jsx';
 import Signup from './Register.jsx';
 import GlbViewer from './components/RotatingRoom.jsx';
+import ProfilePage from './profile.jsx';
+import BookingPage from './BookingPage.jsx';
 
 function App() {
   return (
@@ -21,6 +23,8 @@ function App() {
         <Route path="/addroom" element={<RoomForm />} />
         <Route path="/login" element={<Signin />} />
         <Route path="/rotatingModel" element={<GlbViewer />} />
+        <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/book/:roomID/:checkIn/:checkOut" element={<BookingPage />} />
       </Routes>
     </Router>
   );

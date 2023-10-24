@@ -7,17 +7,20 @@ import Footer from './components/footer.jsx';
 import 'bootstrap/dist/css/bootstrap.css';
 import { useNavigate } from 'react-router-dom';
 
+
+
 const HotelList = () => {
   const [rooms, setRooms] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
   const navigate = useNavigate()
-  const [selectedSortOption, setSelectedSortOption] = useState('priceLowToHigh'); // Default sorting option
+  const [sortBy, setSortBy] = useState('priceHighToLow');
+  const [username, setUsername] = useState('');
 
   const handleCategoryClick = (category) => {
     console.log('Selected category:', category);
     setSelectedCategory(category);
   };
-  const [username, setUsername] = useState('');
+  
 
   useEffect(() => {
     const storedUsername = localStorage.getItem('username');
@@ -29,28 +32,29 @@ const HotelList = () => {
     }
   }, []);
 
-  const handleSortChange = (e) => {
-    setSelectedSortOption(e.target.value);
-    
-    // Sort the original 'rooms' array and store it back in 'rooms'
-    const sortedRooms = sortRooms([...rooms], e.target.value);
+  const sortRooms = (sortBy) => {
+    const sortedRooms = [...rooms];
+
+    switch (sortBy) {
+      case 'priceLowToHigh':
+        sortedRooms.sort((a, b) => a.price - b.price);
+        break;
+      case 'priceHighToLow':
+        sortedRooms.sort((a, b) => b.price - a.price);
+        break;
+      case 'ratingHighToLow':
+        sortedRooms.sort((a, b) => b.rating - a.rating);
+        break;
+      case 'ratingLowToHigh':
+        sortedRooms.sort((a, b) => a.rating - b.rating);
+        break;
+      default:
+        break;
+    }
+
     setRooms(sortedRooms);
   };
 
-  const sortRooms = (rooms, sortOption) => {
-    switch (sortOption) {
-      case 'priceLowToHigh':
-        return rooms.slice().sort((a, b) => a.price - b.price);
-      case 'priceHighToLow':
-        return rooms.slice().sort((a, b) => b.price - a.price);
-      case 'ratingHighToLow':
-        return rooms.slice().sort((a, b) => b.rating - a.rating);
-      case 'ratingLowToHigh':
-        return rooms.slice().sort((a, b) => a.rating - b.rating);
-      default:
-        return rooms;
-    }
-  };
 
   useEffect(() => {
     axios.get('http://localhost:5000/hotels')
@@ -62,25 +66,16 @@ const HotelList = () => {
       });
   }, []);
 
+
+
+
+
   return (
     <div className="body">
       <div>
         <Header />
       </div>
       <div className="Headinglist">
-          <div className="sort-dropdown">
-              <label htmlFor="sortOptions">Sort By: </label>
-              <select
-                id="sortOptions"
-                value={selectedSortOption}
-                onChange={handleSortChange}
-              >
-                <option value="priceLowToHigh">Price Low to High</option>
-                <option value="priceHighToLow">Price High to Low</option>
-                <option value="ratingHighToLow">Rating High to Low</option>
-                <option value="ratingLowToHigh">Rating Low to High</option>
-              </select>
-            </div>
         <div className="HeadingHotel">
         </div>
         <section id="sectionnavbar" className="category-section">
@@ -93,6 +88,23 @@ const HotelList = () => {
               {category}
             </button>
           ))}
+
+
+        <select
+          onChange={(e) => {
+            setSortBy(e.target.value); // Update the selected sorting option in your state
+            sortRooms(e.target.value); // Call the sorting function based on the selected option
+          }}
+          value={sortBy}
+        >
+          <option value="priceHighToLow">Price: High to Low</option>
+          <option value="priceLowToHigh">Price: Low to High</option>
+          <option value="ratingHighToLow">Rating: High to Low</option>
+          <option value="ratingLowToHigh">Rating: Low to High</option>
+        </select>
+
+
+
         </section>
         <div className="hotel-grid">
               {rooms.length > 0 ? (

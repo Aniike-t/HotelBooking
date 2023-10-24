@@ -18,6 +18,9 @@ export default function Header() {
                                 <a className="nav-link active me-2" aria-current="page" href="/landingpage">Home</a>
                             </li>
                             <li className="nav-item">
+                                <a className="nav-link me-2" href="/">Rooms</a>
+                            </li>
+                            <li className="nav-item">
                                 <a className="nav-link me-2" href="/addroom">Register A Room</a>
                             </li>
                             <li className="nav-item">
@@ -27,7 +30,7 @@ export default function Header() {
                                 <a className="nav-link me-2" href="/landingpage">About</a>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link me-2" href="/landingpage">Profile</a>
+                                <a className="nav-link me-2" href="/profile">Profile</a>
                             </li>
                         </ul>
                     </div>

@@ -7,11 +7,25 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import markerIcon from './assets/mark.png'; // Import the image
 import imageCompression from 'browser-image-compression';
+import { useNavigate } from 'react-router';
 
 const RoomForm = () => {
-
+  const navigate = useNavigate()
+  const [username, setUsername] = useState('');
+  const [owner, setOwner]= useState('')
   const [markerPlaced, setMarkerPlaced] = useState(false);
   const [infoFilled, setinfoFilled] =useState(false);
+  useEffect(() => {
+    const storedUsername = localStorage.getItem('username');
+    if (storedUsername) {
+      setUsername(storedUsername);
+      setOwner(storedUsername);
+    }
+    else{
+      navigate('/login')
+    }
+  }, []);
+
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -24,6 +38,7 @@ const RoomForm = () => {
     address:'',
     latitude: '',
     longitude: '',
+    owner:''
   });
   useEffect(() => {
     console.log(formData); // This will log the updated formData
@@ -121,12 +136,17 @@ const RoomForm = () => {
         setinfoFilled(true);
       }
     }
+    console.log(owner)
     
     if (!markerPlaced) {
       alert('Please place a marker on the map');
       return;
     }
     if(infoFilled){
+      setFormData({
+        ...formData,
+        owner: owner,
+      });
       try {
         const response = await fetch('http://localhost:5000/roomsadd', {
           method: 'POST',

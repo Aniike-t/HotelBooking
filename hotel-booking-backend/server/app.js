@@ -8,6 +8,7 @@ const cookieParser = require('cookie-parser');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const userController = require('./userController');
+const crypto = require('crypto');
 
 app.use(cors());
 app.use(express.json());
@@ -57,13 +58,67 @@ passport.use(
 );
 
 
+const bookingsByUserSchema = new mongoose.Schema({
+  username: String,
+  owner: String,
+  bookingID: {
+    type: String,
+    unique: true,
+    required: true,
+  },
+  startDate: Date,
+  endDate: Date,
+  roomID: String,
+  email: String,
+  address: String,
+  sellerphonenumber: Number,
+});
+const BookingsByUser = mongoose.model('BookingsByUser', bookingsByUserSchema);
 
+const hotelBookingDataSchema = new mongoose.Schema({
+  daysOccupied: {
+    type: Number,
+    default: 0,
+  },
+  bookedByUsername: {
+    type: String,
+    default: '',
+  },
+  totalCost: {
+    type: Number,
+    default: 0,
+  },
+  accomodates: {
+    type: Number,
+    default: 1,
+  },
+  startDate: {
+    type: Date,
+  },
+  endDate: {
+    type: Date,
+  }
+});
+
+app.get('/room-details/:roomID', async (req, res) => {
+  try {
+    const requestedRoomID = req.params.roomID;
+    const room = await Room.findOne({ roomID: requestedRoomID });
+    if (!room) {
+      return res.status(404).json({ error: 'Room not found' });
+    }
+    res.json(room);
+  } catch (error) {
+    console.error('Error retrieving room data:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
 const roomSchema = new mongoose.Schema({
   roomID: {
-    type: String, // or Number, depending on your preferences
-    unique: true, // Ensures uniqueness of roomIDs
-    required: true, // Requires a roomID for each document
+    type: String,
+    unique: true, 
+    required: true, 
   },
   title: String,
   description: String,
@@ -78,11 +133,64 @@ const roomSchema = new mongoose.Schema({
   },
   categories: [String],
   address: String,
-  latitude: Number,  // Add latitude as a Number field
-  longitude: Number, // Add longitude as a Number field
+  latitude: Number, 
+  longitude: Number,
+  owner: String,
+  bookings: [hotelBookingDataSchema],
+  overallTotalCost: {
+    type: Number,
+    default: 0,
+  },
+});
+
+app.post('/book-room/:roomID', async (req, res) => {
+  const { roomID } = req.params;
+  const { startDate, endDate, bookedByUsername, totalCost, daysOccupied,email } = req.body
+  try {
+    const room = await Room.findOne({ roomID });
+    const newBooking = {
+      startDate,
+      endDate,
+      bookedByUsername,
+      totalCost,
+      daysOccupied,
+    };
+
+    const uniqueBookingID = generateUniqueBookingID();
+    console.log(uniqueBookingID)
+    const userBooking = new BookingsByUser({
+      roomID,
+      username: bookedByUsername,
+      owner: room.owner,
+      bookingID: uniqueBookingID,
+      startDate,
+      endDate,
+      email:email,
+      address: room.address,
+      sellerphonenumber: room.sellerphonenumber,
+    });
+    await userBooking.save();
+    room.bookings.push(newBooking);
+    room.overallTotalCost += totalCost;
+    await room.save();
+    res.status(201).json(newBooking);
+  } catch (error) {
+    console.error('Error booking the room:', error);
+    res.status(500).json({ error: 'Booking failed' });
+  }
 });
 
 
+
+app.get('/profile', async (req, res) => {
+  const username = req.query.username;
+  console.log(username)
+  if (!username) {
+    return res.status(400).json({ error: 'Username is required' });
+  }
+  const rooms = await Room.find({ owner: username });
+  res.json({ username, rooms });
+});
 
 // Read hotel data from Mongo
 app.get('/hotels', async (req, res) => {
@@ -110,10 +218,25 @@ app.get('/hotels', async (req, res) => {
   }
 });
 
+app.get('/UserBookings', async (req, res) => {
+    const username = req.query.username;
+    console.log("Hi "+username)
+    if (!username) {
+      return res.status(400).json({ error: 'Username is required' });
+    }
+    const userBookings = await BookingsByUser.find({ username });
+    console.log(userBookings)
+    res.json({ bookings: userBookings });
+});
+
+
 app.get('/hotel/:roomID', async (req, res) => {
   try {
     const requestedRoomID = req.params.roomID;
-    const room = await Room.findOne({ roomID: requestedRoomID });
+    const room = await Room.findOne(
+      { roomID: requestedRoomID },
+      ' -overallTotalCost -bookings.bookedByUsername -bookings.totalCost -bookings.accomodates -bookings.daysOccupied'
+    ); 
     if (!room) {
       return res.status(404).json({ error: 'Room not found' });
     }
@@ -140,8 +263,8 @@ const Room = mongoose.model('Room', roomSchema);
 app.post('/roomsadd', async (req, res) => {
   const uniqueRoomID = generateUniqueRoomID();
   console.log(req.body);
-  const { title, description, price, amenities, photos, location, sellerphonenumber,categories, address } = req.body;
-  const room = new Room({ roomID: uniqueRoomID, title, description, price, amenities, photos, location, sellerphonenumber, categories, address });
+  const { title, description, price, amenities, photos, location, sellerphonenumber,categories, address, latitude ,longitude, owner} = req.body;
+  const room = new Room({ roomID: uniqueRoomID, title, description, price, amenities, photos, location, sellerphonenumber, categories, address,latitude ,longitude, owner });
   try {
     await room.save();
     res.json({ message: 'Room added successfully' });
@@ -150,7 +273,28 @@ app.post('/roomsadd', async (req, res) => {
   }
 });
 
+function generateUniqueBookingID() {
+  const randomBuffer = crypto.randomBytes(10);
+  const hexString = randomBuffer.toString('hex');
+  const bookingID = hexString.slice(0, 20);
+  return bookingID;
+}
 
+
+
+app.post('/check-credentials', async (req, res) => {
+  const { username, password } = req.body
+  try {
+    const user = await user.findOne({ username, password });
+    if (user) {
+      return res.json({ success: true, message: 'Credentials are valid.' });
+    }
+    return res.json({ success: false, message: 'Invalid credentials.' });
+  } catch (error) {
+    console.error('Error checking credentials:', error);
+    return res.status(500).json({ success: false, message: 'Server error' });
+  }
+});
 // Implement other routes as needed (e.g., for room data)
 
 app.listen(port, () => {

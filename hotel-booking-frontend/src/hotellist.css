@@ -1,4 +1,5 @@
 .body{
+  font-family: 'Inter', sans-serif;
     background-color: #e6faff;
 }
 
@@ -43,24 +44,27 @@
     font-size: 16px;
     font-weight: 500;
     background-color: #ffffff;
-    border-radius: 10px;
+    border-radius: 12px;
     height: 40px;
     width:100px;
-    padding: 10px 15px;
+    padding: 8px 15px;
     margin: 5px;
     border: none;
     cursor: pointer;
     transition: 0.3s ease-in-out;
+    border: #45454500 2px solid ;
+
 }
 .category-button:hover{
-    background-color: rgb(40,44,52);
+    border: #454545 2px solid ;
+    background-color: #454545;
     color: white;
     transition: 0.3s ease-in-out;
     transform: scale(1.05);
 }
 
 .category-button.active {
-    background-color: rgb(40,44,52);
+    background-color:#454545;
     color: white;
     transition: 0.3s ease-in-out;
     transform: scale(1.05);
@@ -270,5 +274,42 @@
     grid-template-columns: repeat(3, 1fr); /* 3 columns */
     gap: 10px; /* Gap between tiles */
     margin: 0px;
+  }
 }
+
+/* Apply styles to the select element */
+select {
+  margin-left: 20px;
+  margin-right: 20px;
+  transition: 0.3s all;
+  font-size: 20px; /* Set the font size */
+  padding: 10px 15px; /* Set padding */
+  border: 0px solid; /* Add a border */
+  border-radius: 12px; /* Add border radius */
+  background-color: #fff; /* Set background color */
+  color: #333; /* Set text color */
 }
+
+/* Apply styles when the select is hovered */
+select:hover {
+  transform: scale(1.01);
+  color: #ffffff;
+  transition: 0.5s all;
+  background-color: #454545;
+}
+
+/* Apply styles when the select is focused (clicked or active) */
+select:focus {
+  transform: scale(1.01);
+  outline: none;
+  color: #ffffff;
+  transition: 0.5s all;
+  background-color: #454545;
+}
+
+/* Style the options within the select */
+select option {
+  font-size: 16px; /* Set the font size for options */
+}
+
+/* You can add more styles as needed */
