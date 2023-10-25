@@ -11,20 +11,20 @@ import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import L from 'leaflet';
 import markerIcon from './assets/mark.png';
 import { useNavigate } from 'react-router-dom';
+import StarRating from './components/StarRating';
 
 const RoomDetail = () => {
   const navigate = useNavigate();
   const [username, setUsername] = useState('');
   const currentDate = new Date();
   const [existingBookings, setExistingBookings] = useState([]);
+  const [ notLoggedIn, setNotLoggedIn ] = useState(true);
 
   useEffect(() => {
     const storedUsername = localStorage.getItem('username');
     if (storedUsername) {
       setUsername(storedUsername);
-    }
-    else{
-      navigate('/login')
+      setNotLoggedIn(false);
     }
   }, []);
 
@@ -49,12 +49,8 @@ const RoomDetail = () => {
           } else {
             console.error("Data received is not an array:", response.data.bookings);
           }
-          console.log("  hi  "+existingBookings);
-          console.log(existingBookings[0][1]); // or existingCheckIn.toISOString(), toLocaleString(), etc.
-          console.log(roomPrice)
         }
       })
-
       .catch((error) => {
         console.error('Error fetching room data:', error);
       });
@@ -134,6 +130,13 @@ const RoomDetail = () => {
       <Header />
     </div>
       <div >
+        {
+          notLoggedIn ? (
+            <h6 > <a href="/login" style={{textDecoration:"none"}}>  <b>Please Login</b> </a>  </h6>
+          ):(
+            <h6></h6>
+          )
+        }
         {room ? (
           <div style={{ width:"70vw", margin:"20px auto", textAlign:"left"}} >
             <div style={{marginTop:"10px"}}>
@@ -148,6 +151,11 @@ const RoomDetail = () => {
 
           <h4 style={{marginTop:"30px", fontSize:"24px", fontWeight:"bold"}}>Place to stay hosted by {room.owner} </h4>
           <h6>No of Rooms:</h6>
+
+          <div>
+              <StarRating value={room.rating} onChange={() => {}}/>
+          </div>
+          
 
           <hr id='hrstyle'></hr>
 
@@ -213,8 +221,8 @@ const RoomDetail = () => {
             </div>
           </div>
           <hr></hr>
-          <div>
-            <h5 style={{fontWeight:"bold", fontSize:"18px"}}>Amenities</h5>
+          <div style={{textAlign:"left"}}>
+            <h5 style={{ textAlign:"left",fontWeight:"bold", fontSize:"18px",marginTop:"50px"}}> <br /> Amenities</h5>
             <ul >
               {room.amenities.map((amenity, index) => (
                 <li className="amenity-item" key={index}>{amenity}</li>
@@ -224,7 +232,7 @@ const RoomDetail = () => {
           <hr></hr>
           <div>
             <h5 style={{fontWeight:"bold", fontSize:"18px"}}>Hotel Location</h5>
-                
+              <h6><b>Address:</b> {room.address} </h6>   
                 <MapContainer center={[room.latitude,room.longitude]} zoom={13} style={{ height: '400px',borderRadius:"20px", marginTop:"30px" }}>
                   <TileLayer
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

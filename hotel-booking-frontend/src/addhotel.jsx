@@ -285,12 +285,80 @@ const RoomForm = () => {
         <input
             type="checkbox"
             name="amenities"
+            value="Free parking on premises"
+            onChange={handleAmenitiesChange}
+            className="amenity-checkbox"
+        /> Free parking on premises
+        </label>
+        <label className="amenity-label">
+        <input
+            type="checkbox"
+            name="amenities"
             value="TV"
             onChange={handleAmenitiesChange}
             className="amenity-checkbox"
         /> TV
         </label>
-        {/* Add more amenities checkboxes */}
+        <label className="amenity-label">
+        <input
+            type="checkbox"
+            name="amenities"
+            value="Kitchen"
+            onChange={handleAmenitiesChange}
+            className="amenity-checkbox"
+        />
+        Kitchen
+        </label>
+        <label className="amenity-label">
+        <input
+            type="checkbox"
+            name="amenities"
+            value="Garden view"
+            onChange={handleAmenitiesChange}
+            className="amenity-checkbox"
+        /> 
+        Garden view
+        </label>
+        <label className="amenity-label">
+        <input
+            type="checkbox"
+            name="amenities"
+            value="Air conditioning"
+            onChange={handleAmenitiesChange}
+            className="amenity-checkbox"
+        /> 
+        Air conditioning
+        </label>
+        <label className="amenity-label">
+        <input
+            type="checkbox"
+            name="amenities"
+            value="Dedicated workspace"
+            onChange={handleAmenitiesChange}
+            className="amenity-checkbox"
+        /> 
+        Dedicated workspace
+        </label>
+        <label className="amenity-label">
+        <input
+            type="checkbox"
+            name="amenities"
+            value="Fire extinguisher and First Aid Kit"
+            onChange={handleAmenitiesChange}
+            className="amenity-checkbox"
+        /> 
+        Fire extinguisher and First Aid Kit
+        </label>
+        <label className="amenity-label">
+        <input
+            type="checkbox"
+            name="amenities"
+            value="24/7 Security"
+            onChange={handleAmenitiesChange}
+            className="amenity-checkbox"
+        /> 
+        24/7 Security
+        </label>
     </div>
     <div className="photo-section">
         <h3>Upload Photos</h3>
@@ -312,7 +380,7 @@ const RoomForm = () => {
         ))}
         </div>
     </div>
-        <div className="category-section">
+        <div className="category-sectionn">
     <h3>Category</h3>
     <label className="category-label">
         <input
@@ -368,7 +436,76 @@ const RoomForm = () => {
         />
         Mansion
     </label><br />
-    {/* Add more category checkboxes as needed */}
+    <label className="category-label">
+    <input
+    type="checkbox"
+    name="categories"
+    value="Studio"
+    onChange={handleCategoryChange}
+    />
+    Studio
+</label>
+<br />
+<label className="category-label">
+    <input
+    type="checkbox"
+    name="categories"
+    value="Penthouse"
+    onChange={handleCategoryChange}
+    />
+    Penthouse
+    </label>
+    <br />
+    <label className="category-label">
+        <input
+        type="checkbox"
+        name="categories"
+        value="Duplex"
+        onChange={handleCategoryChange}
+        />
+        Duplex
+        </label>
+    <br />
+    <label className="category-label">
+        <input
+        type="checkbox"
+        name="categories"
+        value="Townhouse"
+        onChange={handleCategoryChange}
+        />
+        Townhouse
+    </label>
+    <br />
+    <label className="category-label">
+        <input
+        type="checkbox"
+        name="categories"
+        value="Loft"
+        onChange={handleCategoryChange}
+        />
+        Loft
+    </label>
+    <br />
+    <label className="category-label">
+        <input
+        type="checkbox"
+        name="categories"
+        value="Cabin"
+        onChange={handleCategoryChange}
+        />
+        Cabin
+    </label>
+    <br />
+    <label className="category-label">
+        <input
+        type="checkbox"
+        name="categories"
+        value="Farmhouse"
+        onChange={handleCategoryChange}
+        />
+        Farmhouse
+    </label>
+    <br />
     </div>
     <br />
     <br />
@@ -380,16 +517,16 @@ const RoomForm = () => {
     <input
         type="text"
         name="location"
-        placeholder="Location"
+        placeholder="A short one word laction"
         value={formData.location}
         onChange={handleChange}
         className="room-input"
     />
     </div>
 
-    <div id="map" style={{ height: '70vh', width: '100%' }}></div>
+    <div id="map" style={{ height: '70vh', width: '100%',borderRadius:"20px" }}></div>
 
-    <button type="submit" className="submit-button">Add Room</button>
+      <button type="submit" className="submit-button">Add Room</button>
     </form>
 
     <div>

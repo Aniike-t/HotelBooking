@@ -6,7 +6,7 @@ import Header from './components/header.jsx';
 import Footer from './components/footer.jsx';
 import 'bootstrap/dist/css/bootstrap.css';
 import { useNavigate } from 'react-router-dom';
-
+import StarRating from './components/StarRating';
 
 
 const HotelList = () => {
@@ -51,7 +51,6 @@ const HotelList = () => {
       default:
         break;
     }
-
     setRooms(sortedRooms);
   };
 
@@ -79,7 +78,21 @@ const HotelList = () => {
         <div className="HeadingHotel">
         </div>
         <section id="sectionnavbar" className="category-section">
-          {['Villa', 'Cottage', 'Condo', 'Apartment', 'House', 'Mansion'].map((category) => (
+          <div id="scrollable-buttons">
+          {[  'Villa',
+              'Cottage',
+              'Condo',
+              'Apartment',
+              'House',
+              'Mansion',
+              'Studio',
+              'Penthouse',
+              'Duplex',
+              'Townhouse',
+              'Loft',
+              'Cabin',
+              'Farmhouse',
+          ].map((category) => (
             <button
               key={category}
               onClick={() => handleCategoryClick(category)}
@@ -88,9 +101,11 @@ const HotelList = () => {
               {category}
             </button>
           ))}
+          </div>
 
 
-        <select
+            <div id="sorting-dropdown">
+            <select
           onChange={(e) => {
             setSortBy(e.target.value); // Update the selected sorting option in your state
             sortRooms(e.target.value); // Call the sorting function based on the selected option
@@ -102,10 +117,9 @@ const HotelList = () => {
           <option value="ratingHighToLow">Rating: High to Low</option>
           <option value="ratingLowToHigh">Rating: Low to High</option>
         </select>
-
-
-
+            </div>
         </section>
+
         <div className="hotel-grid">
               {rooms.length > 0 ? (
                 rooms.filter((room) => !selectedCategory || room.categories.includes(selectedCategory)).map((room) => (
@@ -119,7 +133,10 @@ const HotelList = () => {
                         height={250}
                       />
                       <h2 id="heading2">Price: {room.price}/night</h2>
-                      <h4 id="heading3">Rating: {room.rating}</h4>
+                      <div style={{marginLeft:"10px"}}>
+                      <StarRating value={room.rating} onChange={() => {}}/>
+                      </div>
+                      
                       <h4 id="heading3">Location: {room.location}</h4>
                       <Link id="roomlink" to={`/hotel/${room.roomID}`}> <t></t> Book Now
                       </Link>

@@ -3,7 +3,6 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HotelList from './HotelList.jsx';
 import HotelDetail from './HotelDetails.jsx'
-import { useHistory } from 'react-router-dom';
 import RoomForm from './addhotel.jsx'
 import LandingPage from './LandingPage.jsx';
 import Signin from './Login.jsx';
@@ -11,6 +10,7 @@ import Signup from './Register.jsx';
 import GlbViewer from './components/RotatingRoom.jsx';
 import ProfilePage from './profile.jsx';
 import BookingPage from './BookingPage.jsx';
+import FeedbackForm from './Feedback.jsx';
 
 function App() {
   return (
@@ -25,6 +25,7 @@ function App() {
         <Route path="/rotatingModel" element={<GlbViewer />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/book/:roomID/:checkIn/:checkOut" element={<BookingPage />} />
+        <Route path="/feedback/:roomID" element={<FeedbackForm />} />
       </Routes>
     </Router>
   );

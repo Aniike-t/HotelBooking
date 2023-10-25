@@ -3,11 +3,13 @@ import axios from 'axios'; // You can use Axios to make HTTP requests
 import Header from './components/header';
 import { Link } from 'react-router-dom';
 import './profile.css';
+import { useNavigate } from 'react-router-dom';
 
 const ProfilePage = () => {
   const [username, setUsername] = useState('');
   const [rooms, setRooms] = useState([]);
   const [bookings, setBookings] = useState([]);
+  const navigate = useNavigate()
 
   useEffect(() => {
     const storedUsername = localStorage.getItem('username');
@@ -47,7 +49,7 @@ const ProfilePage = () => {
       <div style={{width:"70vw" , marginLeft:"15vw" }}>
         <h1 style={{textAlign:"left", fontSize:"36px", padding:"10px", marginLeft:"20px",marginTop:"20px"}}>Welcome, {username}!</h1>
         <hr></hr>
-        <div style={{ display: 'flex' }}>
+        <div style={{ display: 'flex',overflowX:"auto" }}>
             {bookings.length > 0 ? (
                 <div>
                 <h3 style={{textAlign:"left", fontSize:"25px", padding:"10px", marginLeft:"20px",marginTop:"20px"}}>Your Bookings</h3>
@@ -59,6 +61,9 @@ const ProfilePage = () => {
                         <p> <b>Room Add:</b>  {booking.address}</p>
                         <p> <b>Seller Number:</b>  {booking.sellerphonenumber}</p>
                         <p> <b>Booking ID:</b>  {booking.bookingID}</p>
+                        <p>{booking.roomID}</p>
+                        <button> <b>Check Invoice</b> </button>
+                        <a href={`/feedback/${booking.roomID}`} className="button-link">Give Feedback</a>
                     </div>
                     ))}
                 </ul>

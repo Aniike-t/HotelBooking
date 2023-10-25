@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import 'react-datepicker/dist/react-datepicker.css';
-import { useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 import Header from './components/header';
 import './BookingPage.css';
+
 
 const BookingPage = () => {
   const [username, setUsername] = useState('');

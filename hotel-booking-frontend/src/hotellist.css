@@ -29,7 +29,7 @@
     border-radius: 10px;
     border: 0px solid #ccc;
     padding: 20px;
-    background-color: #ffffff;
+    background-color: #e6faff;
     border-radius: 20px;
 }
 .hotel-tile h2 {
@@ -109,6 +109,7 @@
     margin-top: 0px;
 }
 #sectionnavbar{
+  height: 8vh;
     margin-top: -100px;
     position: "relative";
     background-color: #e6faff;
@@ -312,4 +313,43 @@ select option {
   font-size: 16px; /* Set the font size for options */
 }
 
-/* You can add more styles as needed */
+#scrollable-buttons {
+  width:50%;
+  flex: 1; /* Makes the buttons section expand to fill available space */
+  display: flex;
+  margin-top: 5px;
+  overflow-x: auto; /* Enables horizontal scrolling if buttons overflow */
+}
+
+#scrollable-buttons button {
+  margin-right: 10px; /* Adds some spacing between buttons */
+}
+
+#sorting-dropdown {
+  margin-left: 10px; /* Adds spacing between the buttons and the dropdown */
+}
+.category-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+}
+::-webkit-scrollbar {
+  width: 20px;
+}
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #d6dee1;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #d6dee1;
+  border-radius: 20px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: #d6dee1;
+  border-radius: 20px;
+  border: 6px solid transparent;
+  background-clip: content-box;
+}

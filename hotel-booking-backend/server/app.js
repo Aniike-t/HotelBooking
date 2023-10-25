@@ -73,7 +73,79 @@ const bookingsByUserSchema = new mongoose.Schema({
   address: String,
   sellerphonenumber: Number,
 });
+
 const BookingsByUser = mongoose.model('BookingsByUser', bookingsByUserSchema);
+
+
+const feedbackSchema = new mongoose.Schema({
+  roomID: String,
+  cleanlinessRating: Number,
+  serviceRating: Number,
+  comfortRating: Number,
+  locationRating: Number,
+  valueRating: Number,
+  feedbackText: String,
+  suggestions: String,
+});
+
+
+const Feedback = mongoose.model('Feedback', feedbackSchema);
+
+app.post('/feedback/:roomID', async (req, res) => {
+  const { roomID } = req.params;
+  const feedbackData = req.body;
+  try {
+    // Find all feedback entries for the given room
+    const feedbackEntries = await Feedback.find({ roomID });
+
+  if (feedbackEntries.length > 0) {
+    // Calculate the average ratings from all feedback entries
+    const avgCleanlinessRating =
+      feedbackEntries.reduce((total, entry) => total + entry.cleanlinessRating, 0) /
+      feedbackEntries.length;
+
+    const avgServiceRating =
+      feedbackEntries.reduce((total, entry) => total + entry.serviceRating, 0) /
+      feedbackEntries.length;
+
+    const avgComfortRating =
+      feedbackEntries.reduce((total, entry) => total + entry.comfortRating, 0) /
+      feedbackEntries.length;
+
+    const avgLocationRating =
+      feedbackEntries.reduce((total, entry) => total + entry.locationRating, 0) /
+      feedbackEntries.length;
+
+    const avgValueRating =
+      feedbackEntries.reduce((total, entry) => total + entry.valueRating, 0) /
+      feedbackEntries.length;
+
+    // Calculate the overall rating as the average of the individual ratings
+    const overallRating =
+    Math.floor((avgCleanlinessRating + avgServiceRating + avgComfortRating + avgLocationRating + avgValueRating) / 5);
+
+    // Find and update the room's rating with the new overall rating
+    const room = await Room.findOne({ roomID });
+    console.log(overallRating)
+    if(room.rating===0){
+      room.rating = Math.floor(overallRating);
+      await room.save();
+    }
+    room.rating = Math.floor(room.rating+overallRating)/2;
+    await room.save();
+  }
+} catch (error) {
+  res.status(500).json({ error: 'Internal server error' });
+}
+  try {
+    const newFeedback = new Feedback({ roomID, ...feedbackData });
+    await newFeedback.save();
+    res.json({ success: true });
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 
 const hotelBookingDataSchema = new mongoose.Schema({
   daysOccupied: {
@@ -141,7 +213,35 @@ const roomSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
+  unique:String,
+  hotel_layout:String,
+  promotion: {
+    type:Number,
+    default:0,
+  }
 });
+
+app.get('/landingpagerooms', async (req, res) => {
+  try {
+    const rooms = await Room.find({})
+      .sort({ promotion: -1 }) 
+      .limit(2);
+    const formattedRooms = rooms.map((room) => ({
+      hotel_layout: room.hotel_layout,
+      name: room.title,
+      amenities: room.amenities,
+      price: room.price,
+      title: room.title,
+      photo: room.photos,
+      RoomID: room.roomID
+    }));
+
+    res.json(formattedRooms);
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 
 app.post('/book-room/:roomID', async (req, res) => {
   const { roomID } = req.params;
