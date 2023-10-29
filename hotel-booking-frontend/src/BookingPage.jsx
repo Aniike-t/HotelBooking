@@ -4,7 +4,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { Navigate, useParams } from 'react-router-dom';
 import Header from './components/header';
 import './BookingPage.css';
-
+import Footer from './components/footer';
 
 const BookingPage = () => {
   const [username, setUsername] = useState('');
@@ -22,8 +22,33 @@ const BookingPage = () => {
   const selectedCheckOutDate = new Date(checkOut);
   const [roomData, setRoomData] = useState({});
   const [loading, setLoading] = useState(true);
-
   const [email, setEmail] = useState('');
+  const ServiceCharge = 1000;
+  const [accommodates, setAccommodates] = useState(1);
+  const [breakfast, setBreakfast] = useState(false); 
+  const [lunch, setLunch] = useState(false); 
+  const [dinner, setDinner] = useState(false); 
+
+  const handleAccommodatesChange = (e) => {
+    const newAccommodates = parseInt(e.target.value, 10);
+    if (newAccommodates >= 1 && newAccommodates <= 5) {
+      setAccommodates(newAccommodates);
+    }
+  }
+  const handleBreakfastChange = (e) => {
+    const isChecked = e.target.checked;
+    setBreakfast(isChecked);
+  }
+
+  const handleLunchChange = (e) => {
+    const isChecked = e.target.checked;
+    setLunch(isChecked);
+  }
+
+  const handleDinnerChange = (e) => {
+    const isChecked = e.target.checked;
+    setDinner(isChecked);
+  }
 
   useEffect(() => {
     const fetchRoomData = async () => {
@@ -69,18 +94,46 @@ const BookingPage = () => {
       totalCost: calculateTotalPrice(),
       daysOccupied: calculateDays(),
       email: email,
-      owner: roomData.owner
+      owner: roomData.owner,
+
     };
+    const TransactionData = {
+      startDate: selectedCheckInDate,
+      endDate: selectedCheckOutDate,
+      bookedByUsername: username,
+      totalCost: calculateTotalPrice(),
+      daysOccupied: calculateDays(),
+      email: email,
+      owner: roomData.owner,
+      roomID: roomID,
+      breakfast: breakfast,
+      lunch: lunch,
+      dinner: dinner,
+    }
     console.log(bookingData)
-    axios.post(`http://localhost:5000/book-room/${roomID}`, bookingData)
-      .then((response) => {
-        console.log('Booking confirmed:', response.data);
-        setBookingConfirmed(true);
-      })
-      .catch((error) => {
-        console.error('Error confirming booking:', error);
-      });
+    
+    axios
+    .post(`http://localhost:5000/book-room/${roomID}`, bookingData)
+    .then((response) => {
+      console.log('Booking confirmed:', response.data);
+      axios
+        .post(`http://localhost:5000/create-transaction/${roomID}`, TransactionData)
+        .then((transactionResponse) => {
+          console.log('Transaction created:', transactionResponse.data);
+          alert('Booking and transaction have been confirmed')
+          setBookingConfirmed(true);
+          Navigate('/profile')
+          
+        })
+        .catch((transactionError) => {
+          console.error('Error creating transaction:', transactionError);
+        });
+    })
+    .catch((bookingError) => {
+      console.error('Error confirming booking:', bookingError);
+    });
   };
+
   const isEmailValid = email.length > 0;
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -108,6 +161,41 @@ const BookingPage = () => {
               placeholder="Enter your email"
               style={{padding:"5px", outline:"none", border:"0px", borderRadius:"10px"}}
             />
+          <hr />
+          <h5 style={{ fontWeight: "600" }}>Number of Accommodates (1-5)</h5>
+          <input
+            type="number"
+            value={accommodates}
+            onChange={handleAccommodatesChange}
+            min="1"
+            max="5"
+            style={{ padding: "5px", outline: "none", border: "0px", borderRadius: "10px" }}
+          />
+          <hr />
+          <h5 style={{ fontWeight: "600" }}>Add-ons</h5>
+          <label>
+            <input
+              type="checkbox"
+              checked={breakfast}
+              onChange={handleBreakfastChange}
+            /> Breakfast
+          </label>
+          <br />
+          <label>
+            <input
+              type="checkbox"
+              checked={lunch}
+              onChange={handleLunchChange}
+            /> Lunch
+          </label>
+          <br />
+          <label>
+            <input
+              type="checkbox"
+              checked={dinner}
+              onChange={handleDinnerChange}
+            /> Dinner
+          </label>
         </div>
 
         <div style={{ flex: 1 }}>
@@ -118,8 +206,8 @@ const BookingPage = () => {
             <h6> <b>Total Stay &nbsp; -</b>  {calculateDays()} Days </h6>
             <h6> <b>Total Cost  &nbsp; -</b>  Rs. {calculateTotalPrice()} </h6>
             <hr></hr>
-            <h6> <b>Service Charge &nbsp;-</b>  Rs. 400</h6>
-            <h6> <b>Payable Amount -</b>  Rs. {calculateTotalPrice()+200}</h6>
+            <h6> <b>Service Charge &nbsp;-</b>  Rs. {ServiceCharge}</h6>
+            <h6> <b>Payable Amount -</b>  Rs. {calculateTotalPrice()+ServiceCharge}</h6>
             <p style={{fontSize:"10px", color:"#FF5252"}}>Taxes may apply at payment</p>
             <hr></hr>
 
@@ -135,6 +223,7 @@ const BookingPage = () => {
         </div>
       </div>
     </div>
+    <Footer />
     </>
 
   );

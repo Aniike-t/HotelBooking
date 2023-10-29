@@ -53,7 +53,6 @@ export const useTypingText = (words, keySpeed = 1000, maxPauseAmount = 10) => {
     };
 
     typingInterval.current = setInterval(() => {
-      // Wait until counter hits 0 to do any further action
       if (pauseCounter > 0) {
         pauseCounter = pauseCounter - 1;
         return;

@@ -14,7 +14,7 @@ const Model = ({ gltf }) => {
   });
 
   return (
-    <group ref={gltfRef} scale={[0.030, 0.040, 0.030]}> {/* Scale the model down */}
+    <group ref={gltfRef} scale={[0.025, 0.035, 0.025]}> {/* Scale the model down */}
       <primitive object={gltf.scene} receiveShadow castShadow> {/* Add shadows */}
         <meshPhysicalMaterial color="yellow" metalness={0.2} roughness={1} />
       </primitive>

@@ -8,25 +8,31 @@ import 'leaflet/dist/leaflet.css';
 import markerIcon from './assets/mark.png'; // Import the image
 import imageCompression from 'browser-image-compression';
 import { useNavigate } from 'react-router';
+import axios from 'axios';
+import AdminHeader from './AdminPages/AdminHeader';
 
 const RoomForm = () => {
+  const [hotels, setHotels] = useState([]); // State to store the list of hotels
+  const [selectedHotel, setSelectedHotel] = useState('');
   const navigate = useNavigate()
-  const [username, setUsername] = useState('');
   const [owner, setOwner]= useState('')
   const [markerPlaced, setMarkerPlaced] = useState(false);
   const [infoFilled, setinfoFilled] =useState(false);
+
+
   useEffect(() => {
-    const storedUsername = localStorage.getItem('username');
-    if (storedUsername) {
-      setUsername(storedUsername);
-      setOwner(storedUsername);
-    }
-    else{
-      navigate('/login')
-    }
+    axios.get('http://localhost:5000/AllHotels')
+      .then((response) => {
+        setHotels(response.data);
+      })
+      .catch((error) => {
+        console.error('Error fetching hotels:', error);
+      });
   }, []);
 
   const [formData, setFormData] = useState({
+    room_layout:'',
+    unique:'',
     title: '',
     description: '',
     price: '',
@@ -38,10 +44,12 @@ const RoomForm = () => {
     address:'',
     latitude: '',
     longitude: '',
-    owner:''
+    owner:'',
+    parentHotel: '',
   });
   useEffect(() => {
-    console.log(formData); // This will log the updated formData
+    console.log(formData);
+     // This will log the updated formData
   }, [formData]);
 
   const handleCategoryChange = (e) => {
@@ -60,6 +68,7 @@ const RoomForm = () => {
         [name]: formData[name].filter((item) => item !== value),
       });
     }
+
   };
 
   const handleChange = (e) => {
@@ -125,6 +134,16 @@ const RoomForm = () => {
   };
 
   const handleSubmit = async (e) => {
+    if (!selectedHotel) {
+      alert('Please select a hotel for the room.');
+      return;
+    }
+    if(selectedHotel){
+      setFormData({
+        ...formData,
+        parentHotel: selectedHotel, // Set the parentHotel here
+    });
+    }
     e.preventDefault();
     const requiredFields = ['title', 'description', 'price', 'location', 'sellerphonenumber', 'categories', 'address', 'latitude', 'longitude'];
     for (const field of requiredFields) {
@@ -157,7 +176,9 @@ const RoomForm = () => {
         });
         alert(response.data.message);
         if (response.ok) {
+          alert("Room Added Successfully");
           console.log('Room added successfully');
+          navigate('/')
         } else {
           console.error('Error:', response.statusText);
         }
@@ -225,7 +246,7 @@ const RoomForm = () => {
   return (
     <div className='AddHotelCon'>
     <div>
-        <Header />
+        <AdminHeader />
     </div>
     <form onSubmit={handleSubmit} className="room-form">
     <h1>Rent Your Room</h1>
@@ -507,6 +528,8 @@ const RoomForm = () => {
     </label>
     <br />
     </div>
+    <br></br>
+
     <br />
     <br />
     <br />
@@ -523,6 +546,20 @@ const RoomForm = () => {
         className="room-input"
     />
     </div>
+
+    <select
+          name="selectedHotel"
+          value={selectedHotel}
+          onChange={(e) => setSelectedHotel(e.target.value)}
+          className="room-input"
+        >
+          <option value="" onChange={handleChange}>Select a Hotel</option>
+          {hotels.map((hotel) => (
+            <option key={hotel.allhotelID} value={hotel.allhotelID}>
+              {hotel.name}
+            </option>
+          ))}
+        </select>
 
     <div id="map" style={{ height: '70vh', width: '100%',borderRadius:"20px" }}></div>
 

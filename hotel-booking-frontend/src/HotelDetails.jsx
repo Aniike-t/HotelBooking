@@ -142,6 +142,7 @@ const RoomDetail = () => {
             <div style={{marginTop:"10px"}}>
               <p  style={{fontSize:"48px", fontWeight:"bolder"}}>{room.title}</p>
               <p style={{marginTop:"-20px", fontSize:"20px"}}>Location: {room.location}</p>
+              <p style={{marginTop:"-20px", fontSize:"20px"}}>{room.parentHotel}</p>
             </div>
 
             <div style={{ borderRadius:"20px",border:"0px",maxHeight:"390px", maxWidth:"585px"}} >
@@ -150,7 +151,7 @@ const RoomDetail = () => {
           <div>
 
           <h4 style={{marginTop:"30px", fontSize:"24px", fontWeight:"bold"}}>Place to stay hosted by {room.owner} </h4>
-          <h6>No of Rooms:</h6>
+          <h6>No of Rooms:{room.room_layout}</h6>
 
           <div>
               <StarRating value={room.rating} onChange={() => {}}/>
@@ -161,7 +162,7 @@ const RoomDetail = () => {
 
           <div className="column" >
             <h6 style={{fontWeight:"bold", fontSize:"18px"}}> <img src={require("./assets/cancellationicon.png")} alt="cancellationicon" style={{height:"40px"}}/> Free cancellation before 2 days of check-in</h6>
-            <p>room.unique</p>
+            <p>{room.unique}</p>
             <hr></hr>
             <h6 style={{fontWeight:"bold", fontSize:"18px"}}>Description By Owner</h6>
             <p>{room.description}</p>
@@ -220,7 +221,9 @@ const RoomDetail = () => {
                 )}
             </div>
           </div>
+
           <hr></hr>
+
           <div style={{textAlign:"left"}}>
             <h5 style={{ textAlign:"left",fontWeight:"bold", fontSize:"18px",marginTop:"50px"}}> <br /> Amenities</h5>
             <ul >
@@ -229,6 +232,7 @@ const RoomDetail = () => {
               ))}
             </ul>
           </div>
+
           <hr></hr>
           <div>
             <h5 style={{fontWeight:"bold", fontSize:"18px"}}>Hotel Location</h5>

@@ -9,6 +9,10 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const userController = require('./userController');
 const crypto = require('crypto');
+const { PDFDocument } = require('pdf-lib');
+const { v4: uuidv4 } = require('uuid');
+
+
 
 app.use(cors());
 app.use(express.json());
@@ -76,6 +80,104 @@ const bookingsByUserSchema = new mongoose.Schema({
 
 const BookingsByUser = mongoose.model('BookingsByUser', bookingsByUserSchema);
 
+app.get('/invoicePDF/:bookingID', async (req, res) => {
+  const { bookingID } = req.params;
+  try {
+    const booking = await BookingsByUser.findOne({ bookingID });
+
+    if (!booking) {
+      return res.status(404).json({ message: 'Booking not found' });
+    }
+    const pdfDoc = await PDFDocument.PDFDocument.create();
+    const page = pdfDoc.addPage([600, 400]);
+    const { width, height } = page.getSize();
+    const contentStream = pdfDoc.createContentStream([
+      PDFDocument.PDFObject.fromJSON({ operator: 'BT' }),
+      PDFDocument.PDFObject.fromJSON({ operator: 'Tf', operands: ['/Helvetica', 24] }),
+      PDFDocument.PDFObject.fromJSON({ operator: 'Td', operands: [50, height - 50] }),
+      PDFDocument.PDFObject.fromJSON({ operator: 'Tj', operands: [`${booking.bookingID}`] }),
+      PDFDocument.PDFObject.fromJSON({ operator: 'ET' }),
+    ]);
+
+    page.getOperatorList().addContent(contentStream);
+    page.drawText(`Invoice for Booking: ${booking.bookingID}`, { x: 50, y: height - 50 });
+
+    const pdfBytes = await pdfDoc.save();
+
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', `attachment; filename=invoice_${booking.bookingID}.pdf`);
+    res.send(pdfBytes);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
+
+const hotelSchema = new mongoose.Schema({
+  allhotelID: {
+    type: String,
+    unique: true,
+    required: true,
+  },
+  roomIDs: [String],
+  name: String,
+  location: String,
+  numberOfRooms: {
+    type: Number,
+    default: 0,
+  },
+});
+
+const Hotel = mongoose.model('Hotel', hotelSchema);
+
+app.get('/AllHotels', async (req, res) => {
+  try {
+    const hotels = await Hotel.find();
+    res.json(hotels);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch hotels' });
+  }
+});
+
+app.post('/AllHotelsCreate', async (req, res) => {
+  try {
+    const uniqueHotelID = generateUniqueHotelID();
+    const hotelData = { allhotelID: uniqueHotelID, ...req.body };
+    const hotel = new Hotel(hotelData);
+    await hotel.save();
+    res.json({ message: 'Hotel created successfully' });
+  } catch (error) {
+    if (error.name === 'ValidationError') {
+      res.status(400).json({ error: 'Validation error', details: error.errors });
+    } else {
+      res.status(500).json({ error: 'Failed to create hotel' });
+    }
+  }
+});
+
+function generateUniqueHotelID() {
+  return uuidv4();
+}
+
+
+
+app.get('/InvoiceInfo/:bookingID', async (req, res) => {
+  const { bookingID } = req.params;
+
+  try {
+    // Fetch the booking data from the database based on bookingID
+    const booking = await BookingsByUser.findOne({ bookingID });
+
+    if (!booking) {
+      return res.status(404).json({ message: 'Booking not found' });
+    }
+
+    res.json(booking);
+  } catch (error) {
+    console.error('Error fetching invoice data:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+});
 
 const feedbackSchema = new mongoose.Schema({
   roomID: String,
@@ -187,6 +289,7 @@ app.get('/room-details/:roomID', async (req, res) => {
 });
 
 const roomSchema = new mongoose.Schema({
+  parentHotel: String,
   roomID: {
     type: String,
     unique: true, 
@@ -213,12 +316,13 @@ const roomSchema = new mongoose.Schema({
     type: Number,
     default: 0,
   },
-  unique:String,
-  hotel_layout:String,
+  unique: String,
+  room_layout: String,
   promotion: {
     type:Number,
     default:0,
-  }
+  },
+  
 });
 
 app.get('/landingpagerooms', async (req, res) => {
@@ -293,10 +397,10 @@ app.get('/profile', async (req, res) => {
 });
 
 // Read hotel data from Mongo
-app.get('/hotels', async (req, res) => {
+app.get('/allhotels/:parentHotel', async (req, res) => {
   try {
-    const roomsWithFirstPhotos = await Room.find({}, 'roomID id title price location categories rating photos').exec();
-
+    const parentHotel = req.params.parentHotel; 
+    const roomsWithFirstPhotos = await Room.find({ parentHotel }, 'roomID id title price location categories rating photos').exec();
     const rooms = roomsWithFirstPhotos.map((room) => {
       return {
         roomID: room.roomID,
@@ -306,17 +410,19 @@ app.get('/hotels', async (req, res) => {
         location: room.location,
         categories: room.categories,
         rating: room.rating,
-        photos: room.photos.length > 0 ? room.photos[0] : null, // Get the first photo
+        photos: room.photos.length > 0 ? room.photos[0] : null,
       };
     });
-
-    console.log(rooms)
+    console.log(rooms);
     res.json(rooms);
   } catch (error) {
     console.error('Error retrieving room data:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+
+
 
 app.get('/UserBookings', async (req, res) => {
     const username = req.query.username;
@@ -341,6 +447,7 @@ app.get('/hotel/:roomID', async (req, res) => {
       return res.status(404).json({ error: 'Room not found' });
     }
     res.json(room);
+    console.log(room);
   } catch (error) {
     console.error('Error retrieving room data:', error);
     res.status(500).json({ error: 'Internal Server Error' });
@@ -363,12 +470,23 @@ const Room = mongoose.model('Room', roomSchema);
 app.post('/roomsadd', async (req, res) => {
   const uniqueRoomID = generateUniqueRoomID();
   console.log(req.body);
-  const { title, description, price, amenities, photos, location, sellerphonenumber,categories, address, latitude ,longitude, owner} = req.body;
-  const room = new Room({ roomID: uniqueRoomID, title, description, price, amenities, photos, location, sellerphonenumber, categories, address,latitude ,longitude, owner });
+  const { title, description, price, amenities, photos, location, sellerphonenumber,categories, address, latitude ,longitude, owner,room_layout, unique, parentHotel} = req.body;
+  const room = new Room({ roomID: uniqueRoomID, title, description, price, amenities, photos, location, sellerphonenumber, categories, address,latitude ,longitude, owner,room_layout, unique, parentHotel });
+   
   try {
     await room.save();
+    
+    const filter = { allhotelID: parentHotel };
+    const update = {
+      $push: { roomIDs: room.roomID }, 
+      $inc: { numberOfRooms: 1 }, 
+    };
+    
+    await Hotel.findOneAndUpdate(filter, update);
+
     res.json({ message: 'Room added successfully' });
-  } catch (error) {
+  } 
+    catch (error) {
     res.status(500).json({ error: 'Failed to add room' });
   }
 });
@@ -395,7 +513,86 @@ app.post('/check-credentials', async (req, res) => {
     return res.status(500).json({ success: false, message: 'Server error' });
   }
 });
-// Implement other routes as needed (e.g., for room data)
+
+const admin = [
+  { username: "admin", password: "admin@123" },
+  { username: "user2", password: "password2" },
+];
+
+app.post("/adminlogin", (req, res) => {
+  const { username, password } = req.body;
+  const matchedAdmin = admin.find((user) => user.username === username && user.password === password);
+  if (matchedAdmin) {
+    res.status(200).json({ message: "Authentication successful" });
+  } else {
+    res.status(401).json({ message: "Authentication failed" });
+  }
+});
+
+
+const transactionSchema = new mongoose.Schema({
+  startDate: Date,
+  endDate: Date,
+  bookedByUsername: String,
+  totalCost: Number,
+  daysOccupied: Number,
+  email: String,
+  owner: String,
+  roomID: String,
+  breakfast: Boolean,
+  lunch: Boolean,
+  dinner: Boolean,
+  TotalTransaction: Number, 
+});
+
+const TransactionData = mongoose.model('TransactionData', transactionSchema);
+
+app.post('/create-transaction/:roomID', async (req, res) => {
+  try {
+    const {
+      startDate,
+      endDate,
+      bookedByUsername,
+      totalCost,
+      daysOccupied,
+      email,
+      owner,
+      roomID,
+      breakfast,
+      lunch,
+      dinner,
+    } = req.body;
+    console.log(req.body);
+
+    const TotalTransaction =
+    (breakfast ? 500 : 0) * daysOccupied +
+    (lunch ? 500 : 0) * daysOccupied +
+    (dinner ? 500 : 0) * daysOccupied + totalCost;
+
+    console.log(TotalTransaction);
+
+    const transactionData = new TransactionData({
+      startDate,
+      endDate,
+      totalCost,
+      bookedByUsername,
+      daysOccupied,
+      email,
+      owner,
+      roomID,
+      breakfast,
+      lunch,
+      dinner,
+      TotalTransaction,
+    });
+
+    const savedTransactionData = await transactionData.save();
+    res.status(201).json(savedTransactionData);
+  } catch (error) {
+    console.error('Error creating transaction:', error);
+    res.status(500).json({ error: 'Error creating transaction' });
+  }
+});
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);

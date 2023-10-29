@@ -45,7 +45,7 @@ const Footer = () => {
           <a href="#"><i className="bi bi-instagram"></i></a>
         </div>
         <div className="footer-legal">
-          <p>&copy; {new Date().getFullYear()} Airbnb, Inc. All rights reserved</p>
+          <p>&copy; {new Date().getFullYear()} Hotel, Inc. All rights reserved</p>
           <p><a href="/privacy">Privacy</a> &middot; <a href="/terms">Terms</a> &middot; <a href="/sitemaps">Sitemaps</a></p>
         </div>
       </div>

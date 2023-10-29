@@ -18,13 +18,10 @@ export default function Header() {
                                 <a className="nav-link active me-2" aria-current="page" href="/landingpage">Home</a>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link me-2" href="/">Rooms</a>
+                                <a className="nav-link me-2" href="/allHotels">Rooms</a>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link me-2" href="/addroom">Register A Room</a>
-                            </li>
-                            <li className="nav-item">
-                                <a className="nav-link me-2" href="#">Contact us</a>
+                                <a className="nav-link me-2" href="/">Contact us</a>
                             </li>
                             <li className="nav-item">
                                 <a className="nav-link me-2" href="/landingpage">About</a>

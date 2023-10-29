@@ -62,7 +62,7 @@ const ProfilePage = () => {
                         <p> <b>Seller Number:</b>  {booking.sellerphonenumber}</p>
                         <p> <b>Booking ID:</b>  {booking.bookingID}</p>
                         <p>{booking.roomID}</p>
-                        <button> <b>Check Invoice</b> </button>
+                        <a href={`/invoice/${booking.bookingID}`} className="button-link">Give Feedback</a>
                         <a href={`/feedback/${booking.roomID}`} className="button-link">Give Feedback</a>
                     </div>
                     ))}

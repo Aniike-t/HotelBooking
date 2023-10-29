@@ -47,6 +47,10 @@ function LandingPage() {
     const GoToRegisterPage = () => {
         navigate('/register')
     }
+    const scrollToContactUsSection = () =>{
+        const SrcollContactUs = document.getElementById('footersection')
+        SrcollContactUs.scrollIntoView({behavior:'smooth'});
+    }
     const { word, stop, start } = useTypingText(
         ['Villa', 'Cottage', 'Condo', 'Apartment', 'House', 'Mansion'],
         130,
@@ -85,16 +89,16 @@ function LandingPage() {
                                 <a className="nav-link active me-2" aria-current="page" href="/landingpage">Home</a>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link me-2" href="/">Room</a>
+                                <a className="nav-link me-2" href="/allHotels">Room</a>
                             </li>
                             <li className="nav-item">
                                 <a className="nav-link me-2" onClick={scrollToAmenitiesSection}>Facilities</a>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link me-2" href="#">Contact us</a>
+                                <a className="nav-link me-2" onClick={scrollToContactUsSection}>Contact us</a>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link me-2" href="#">About</a>
+                                <a className="nav-link me-2" onClick={scrollToContactUsSection}>About</a>
                             </li>
                         </ul>
                         <form className="d-flex">
@@ -129,23 +133,18 @@ function LandingPage() {
             </div>
 
             <div>
-                <div id="rownavbarcontainer" className="row" style={{ position: 'relative', width:"50vw",marginLeft: "25vw" }}>
+                <div id="rownavbarcontainer" className="row" style={{ position: 'relative', width:"30vw",marginLeft: "35vw" }}>
                     <div id="rownavbarcontainer" className="col-lg-12 shadow p-4 rounded">
+                        
                         <div className="row align-items-end">
-                            <div className="col-lg-3 mb-3">
-                                <a id="link" href="#">Location</a>
-                            </div>
-                            <div className="col-lg-3 mb-3">
-                                <a id="link" href="#">Booking</a>
+                            <div className="col-lg-3 mb-3" style={{paddingLeft:"50px"}}>
+                                <a id="link" href="/Profile" >Booking</a>
                             </div>
 
-                            <div className="col-lg-3 mb-3">
+                            <div className="col-lg-3 mb-3" style={{paddingLeft:"140px"}}>
                                 <a id="link" href="/">Rooms</a>
                             </div>
 
-                            <div className="col-lg-1 mb-lg-3 nt-2">
-                                <button class="btn btn-outline-success" type="submit">Search</button>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -359,7 +358,8 @@ function LandingPage() {
                         <Signin />
                     </div>
                 </div>
-                <Footer/>
+                <div id="footersection"></div>
+                <Footer />
             </div>	
         );}
 

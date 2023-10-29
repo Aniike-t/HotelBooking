@@ -7,9 +7,10 @@ import Footer from './components/footer.jsx';
 import 'bootstrap/dist/css/bootstrap.css';
 import { useNavigate } from 'react-router-dom';
 import StarRating from './components/StarRating';
-
+import { useParams } from 'react-router-dom';
 
 const HotelList = () => {
+  const { parentHotel } = useParams();
   const [rooms, setRooms] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
   const navigate = useNavigate()
@@ -56,7 +57,7 @@ const HotelList = () => {
 
 
   useEffect(() => {
-    axios.get('http://localhost:5000/hotels')
+    axios.get(`http://localhost:5000/allhotels/${parentHotel}`)
       .then((response) => {
         setRooms(response.data);
       })

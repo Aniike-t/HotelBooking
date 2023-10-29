@@ -4,6 +4,8 @@ import { useParams } from 'react-router-dom';
 import StarRating from './components/StarRating';
 import './feedback.css'
 import { useNavigate } from 'react-router-dom';
+import Header from './components/header';
+import Footer from './components/footer';
 
 function FeedbackForm() {
     const navigate = useNavigate()
@@ -37,7 +39,9 @@ function FeedbackForm() {
   };
 
   return (
-    <div id="Fdiv">
+    <>
+    <Header/>
+    <div id="Fdiv" style={{marginTop:"100px"}}>
       <h2 id='Fh2'>Feedback for Room You Recently Visited</h2>
       <div>
         <label id="Flabel">Cleanliness</label>
@@ -69,6 +73,8 @@ function FeedbackForm() {
       </div>
       <button id="Fbutton" onClick={submitFeedback}>Submit Feedback</button>
     </div>
+    <Footer/>
+    </>
   );
 }
 

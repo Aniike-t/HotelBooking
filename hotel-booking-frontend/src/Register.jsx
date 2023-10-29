@@ -2,6 +2,9 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import zxcvbn from 'zxcvbn'; // Import the password strength library
 import { useNavigate } from 'react-router-dom';
+import Header from './components/header';
+import Footer from './components/footer';
+import './LoginPage.css';
 
 const Signup = () => {
   const navigate = useNavigate()
@@ -57,30 +60,42 @@ const Signup = () => {
   };
 
   return (
+    <>
+    <Header/>
     <div>
-      <h2>Signup</h2>
-      <form onSubmit={handleSubmit}>
+      
+      <br />
+      <div style={{margin:"10vh 37vw"}}>
+      <h2>  <b>Signup</b> </h2> <br />
+      <form onSubmit={handleSubmit} >
         <input
           type="text"
           name="username"
           placeholder="Username"
           value={formData.username}
           onChange={handleChange}
+          className="input-box"
         />
+        <br />
         <input
           type="password"
           name="password"
           placeholder="Password"
           value={formData.password}
           onChange={handleChange}
+          className="input-box"
         />
+        <br />
         <input
           type="password"
           name="rePassword"
           placeholder="Re-enter Password"
           value={formData.rePassword}
           onChange={handleChange}
+          className="input-box"
         />
+        <br />
+        
 
         {/* Display a message for unsuccessful registration */}
         {registrationError && <p className="error-message">{registrationError}</p>}
@@ -90,9 +105,12 @@ const Signup = () => {
           <p>Password Strength: {passwordStrength === 4 ? 'Strong' : 'Weak'}</p>
         )}
 
-        <button type="submit">Sign Up</button>
+        <button type="submit" className="login_button">Sign Up</button>
       </form>
+      </div>
     </div>
+    <Footer/>
+    </>
   );
 };
 
