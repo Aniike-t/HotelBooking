@@ -2,6 +2,9 @@
 import React, { useState,useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import Header from './components/header';
+import Footer from './components/footer';
+import './invoice.css'
 
 const Invoice = () => {
     const { bookingID } = useParams();
@@ -13,13 +16,6 @@ const Invoice = () => {
     }, [bookingID]);
   
     const downloadInvoice = async () => {
-      try {
-        const response = await axios.get(`http://localhost:5000/invoicePDF/${bookingID}`, { responseType: 'blob' });
-        const url = window.URL.createObjectURL(new Blob([response.data]));
-        setPdfData(url);
-      } catch (error) {
-        console.error('Error downloading invoice:', error);
-      }
   
       try {
         // Fetch additional data from the database based on bookingID
@@ -32,18 +28,19 @@ const Invoice = () => {
 
   return (
     <div>
-      <h2>Invoice Page</h2>
-      <button onClick={downloadInvoice}>Download Invoice</button>
+      <Header/>
+      
       {invoiceData && (
-        <div>
-          <p>Booking ID: {invoiceData.bookingID}</p>
-          <p>Start Date: {invoiceData.startDate}</p>
-          <p>End Date: {invoiceData.endDate}</p>
-          <p>Address: {invoiceData.address}</p>
-          <p>Seller Phone Number: {invoiceData.sellerphonenumber}</p>
+        <div className='invoicecon'>
+          <h2><b>Invoice </b> </h2>
+          <hr />
+          <p><b>Booking ID: </b> {invoiceData.bookingID}</p>
+          <p><b>Check In: </b> {invoiceData.startDate}</p>
+          <p><b>Check Out: </b> {invoiceData.endDate}</p>
+          <p><b>Address: </b> {invoiceData.address}</p>
+          <p><b>Seller Phone Number: </b> {invoiceData.sellerphonenumber}</p>
         </div>
       )}
-      {pdfData && <embed src={pdfData} type="application/pdf" width="100%" height="500px" />}
     </div>
   );
 };

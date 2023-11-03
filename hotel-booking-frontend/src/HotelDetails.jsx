@@ -113,16 +113,21 @@ const RoomDetail = () => {
     for (const booking of existingBookings) {
       const existingCheckIn = new Date(booking.startDate);
       const existingCheckOut = new Date(booking.endDate);
-      console.log(existingCheckIn);
-      console.log(checkInDate);
-      if (checkInDate < existingCheckIn || checkOutDate < existingCheckOut) {
+      existingCheckIn.setHours(0, 0, 0, 0);
+      existingCheckOut.setHours(0, 0, 0, 0);
+      checkInDate.setHours(0, 0, 0, 0);
+      checkOutDate.setHours(0, 0, 0, 0);
+  
+      if (checkInDate <= existingCheckOut && checkOutDate >= existingCheckIn) {
         console.log("Conflict found");
         return false;
       }
     }
+  
     console.log("Reservation is valid");
     return true;
   };
+  
 
   return (
     <div className='body'>
@@ -142,7 +147,6 @@ const RoomDetail = () => {
             <div style={{marginTop:"10px"}}>
               <p  style={{fontSize:"48px", fontWeight:"bolder"}}>{room.title}</p>
               <p style={{marginTop:"-20px", fontSize:"20px"}}>Location: {room.location}</p>
-              <p style={{marginTop:"-20px", fontSize:"20px"}}>{room.parentHotel}</p>
             </div>
 
             <div style={{ borderRadius:"20px",border:"0px",maxHeight:"390px", maxWidth:"585px"}} >
@@ -151,7 +155,7 @@ const RoomDetail = () => {
           <div>
 
           <h4 style={{marginTop:"30px", fontSize:"24px", fontWeight:"bold"}}>Place to stay hosted by {room.owner} </h4>
-          <h6>No of Rooms:{room.room_layout}</h6>
+          <br />
 
           <div>
               <StarRating value={room.rating} onChange={() => {}}/>
@@ -191,9 +195,6 @@ const RoomDetail = () => {
                 />
               </div>
               <hr style={{width:"100%"}}></hr>
-
-
-
                 { checkInDate && checkOutDate ? (
                   <div>
                     <p>Number of Days: {calculateTotalDays()} days</p>

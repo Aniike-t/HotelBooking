@@ -4,6 +4,7 @@ import Header from './components/header';
 import { Link } from 'react-router-dom';
 import './profile.css';
 import { useNavigate } from 'react-router-dom';
+import Footer from './components/footer';
 
 const ProfilePage = () => {
   const [username, setUsername] = useState('');
@@ -61,9 +62,9 @@ const ProfilePage = () => {
                         <p> <b>Room Add:</b>  {booking.address}</p>
                         <p> <b>Seller Number:</b>  {booking.sellerphonenumber}</p>
                         <p> <b>Booking ID:</b>  {booking.bookingID}</p>
-                        <p>{booking.roomID}</p>
-                        <a href={`/invoice/${booking.bookingID}`} className="button-link">Give Feedback</a>
-                        <a href={`/feedback/${booking.roomID}`} className="button-link">Give Feedback</a>
+                        <a href={`/invoice/${booking.bookingID}`} style={{padding:"5px", backgroundColor:"white"}} className="button-link">Invoice</a>
+                        <br />
+                        <a href={`/feedback/${booking.roomID}`} style={{padding:"5px", backgroundColor:"white"}} className="button-link">Give Feedback</a>
                     </div>
                     ))}
                 </ul>
@@ -71,29 +72,9 @@ const ProfilePage = () => {
             ) : (
                 <h3 style={{textAlign:"left", fontSize:"25px", padding:"10px", marginLeft:"20px",marginTop:"20px"}}>No Bookings Found <br />Contact Us If Case Of Error </h3>
             )}
-            </div>
-
-        <hr></hr>
-        <h3 style={{textAlign:"left", fontSize:"25px", padding:"10px", marginLeft:"20px",marginTop:"20px"}}>Your Hotels</h3>
-        <div className="hotel-list" style={{ display: 'flex', overflowX: 'auto' }}>
-        {rooms.map((room) => (
-            <div key={room.roomID} className="roomtile" style={{ marginRight: '20px' }}>
-            <img src={room.photos} alt={room.title} height={150} style={{borderRadius:"10px"}}/>
-            <h4 style={{padding:"5px 10px ", fontWeight:"500"}}>{room.title}</h4>
-            <Link id="roomlink1" to={`/hotel/${room.roomID}`} style={{ textAlign: 'start' }}>
-                See Details
-            </Link>
-            <br />
-            <Link id="roomlink1" to={`/hotel/${room.roomID}`} style={{ width: '100px' }}>
-                See Insights
-            </Link>
-            <br />
-            </div>
-        ))}
+            </div>  
         </div>
-
-
-      </div>
+      <Footer/>
     </div>
   );
 };

@@ -51,7 +51,7 @@ const AdminPage = () => {
             ) : (
                 <>
                 <div style={{marginLeft:"3vw", padding:"20px", fontWeight:"bold", width:"fit-content"}}>
-                <h3 style={{ alignItems: "left", textAlign: "start" }}>Admin SignIn</h3>
+                
                     <div style={{marginTop:"2vh"}}>
                         <input
                             type="text"
@@ -74,7 +74,6 @@ const AdminPage = () => {
                     </div>
                     <button onClick={handleSignIn} style={{width:"100%",marginTop:"2vh"}}>Sign In</button>
                 </div>
-                    
                 </>
             )}
             

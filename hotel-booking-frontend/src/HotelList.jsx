@@ -80,19 +80,7 @@ const HotelList = () => {
         </div>
         <section id="sectionnavbar" className="category-section">
           <div id="scrollable-buttons">
-          {[  'Villa',
-              'Cottage',
-              'Condo',
-              'Apartment',
-              'House',
-              'Mansion',
-              'Studio',
-              'Penthouse',
-              'Duplex',
-              'Townhouse',
-              'Loft',
-              'Cabin',
-              'Farmhouse',
+          {[  'Work Area', 'Double Bed', 'Single Bed', 'Balcony', 'Kitchen', 'Two Room', 'One Room'
           ].map((category) => (
             <button
               key={category}

@@ -314,7 +314,7 @@ select option {
 }
 
 #scrollable-buttons {
-  width:50%;
+  width:fit-content;
   flex: 1; /* Makes the buttons section expand to fill available space */
   display: flex;
   margin-top: 5px;
@@ -322,6 +322,7 @@ select option {
 }
 
 #scrollable-buttons button {
+  width:fit-content;
   margin-right: 10px; /* Adds some spacing between buttons */
 }
 

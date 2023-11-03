@@ -548,6 +548,7 @@ const transactionSchema = new mongoose.Schema({
 const TransactionData = mongoose.model('TransactionData', transactionSchema);
 
 app.post('/create-transaction/:roomID', async (req, res) => {
+  const { roomID } = req.params;
   try {
     const {
       startDate,

@@ -28,6 +28,7 @@ const BookingPage = () => {
   const [breakfast, setBreakfast] = useState(false); 
   const [lunch, setLunch] = useState(false); 
   const [dinner, setDinner] = useState(false); 
+  const [Addons, setAddons] = useState(0)
 
   const handleAccommodatesChange = (e) => {
     const newAccommodates = parseInt(e.target.value, 10);
@@ -38,16 +39,34 @@ const BookingPage = () => {
   const handleBreakfastChange = (e) => {
     const isChecked = e.target.checked;
     setBreakfast(isChecked);
+    if(!breakfast){
+      setAddons(Addons+500*calculateDays())
+    }
+    else{
+      setAddons(Addons-500*calculateDays())
+    }
   }
 
   const handleLunchChange = (e) => {
     const isChecked = e.target.checked;
     setLunch(isChecked);
+    if(!lunch){
+      setAddons(Addons+500*calculateDays())
+    }
+    else{
+      setAddons(Addons-500*calculateDays())
+    }
   }
 
   const handleDinnerChange = (e) => {
     const isChecked = e.target.checked;
     setDinner(isChecked);
+    if(!dinner){
+      setAddons(Addons+500*calculateDays())
+    }
+    else{
+      setAddons(Addons-500*calculateDays())
+    }
   }
 
   useEffect(() => {
@@ -120,9 +139,7 @@ const BookingPage = () => {
         .post(`http://localhost:5000/create-transaction/${roomID}`, TransactionData)
         .then((transactionResponse) => {
           console.log('Transaction created:', transactionResponse.data);
-          alert('Booking and transaction have been confirmed')
-          setBookingConfirmed(true);
-          Navigate('/profile')
+          CallProfile()
           
         })
         .catch((transactionError) => {
@@ -132,8 +149,11 @@ const BookingPage = () => {
     .catch((bookingError) => {
       console.error('Error confirming booking:', bookingError);
     });
-  };
 
+  };
+  const CallProfile = () =>{
+    return <Navigate to="/profile" />
+  }
   const isEmailValid = email.length > 0;
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -207,12 +227,13 @@ const BookingPage = () => {
             <h6> <b>Total Cost  &nbsp; -</b>  Rs. {calculateTotalPrice()} </h6>
             <hr></hr>
             <h6> <b>Service Charge &nbsp;-</b>  Rs. {ServiceCharge}</h6>
-            <h6> <b>Payable Amount -</b>  Rs. {calculateTotalPrice()+ServiceCharge}</h6>
+            <h6><b>Addons Price-</b> Rs {Addons}</h6>
+            <h6> <b>Payable Amount -</b>  Rs. {calculateTotalPrice()+ServiceCharge+Addons}</h6>
             <p style={{fontSize:"10px", color:"#FF5252"}}>Taxes may apply at payment</p>
             <hr></hr>
 
             { isEmailValid ?(
-              <button onClick={handleConfirmBooking} style={{width:"100%", border:"0px", padding:"5px"}} >Confirm Booking</button>
+              <button id="confirmbookingbtn" onClick={handleConfirmBooking} style={{width:"100%", border:"0px", padding:"5px"}} >Confirm Booking</button>
             ):(
               <button onClick={handleConfirmBooking} style={{width:"100%", border:"0px", padding:"5px" }} disabled >Confirm Booking</button>
             )

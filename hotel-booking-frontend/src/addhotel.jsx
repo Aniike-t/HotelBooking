@@ -407,126 +407,74 @@ const RoomForm = () => {
         <input
         type="checkbox"
         name="categories"
-        value="Apartment"
+        value="One Room"
         onChange={handleCategoryChange}
         />
-        Apartment 
-    </label>    <br />
+        One Room
+    </label> <br />
     <label className="category-label">
         <input
         type="checkbox"
         name="categories"
-        value="House"
+        value="Two Room"
         onChange={handleCategoryChange}
         />
-        House
-    </label>     <br />
+        Two Room 
+    </label>  <br />
     <label className="category-label">
         <input
         type="checkbox"
         name="categories"
-        value="Condo"
+        value="Kitchen"
         onChange={handleCategoryChange}
         />
-        Condo
-    </label><br />
+        Kitchen
+    </label>          <br />
     <label className="category-label">
         <input
         type="checkbox"
         name="categories"
-        value="Cottage"
+        value="Balcony"
         onChange={handleCategoryChange}
         />
-        Cottage
-    </label><br />
+        Balcony 
+    </label>      <br />
     <label className="category-label">
         <input
         type="checkbox"
         name="categories"
-        value="Villa"
+        value="Single Bed"
         onChange={handleCategoryChange}
         />
-        Villa
-    </label><br />
+        Single Bed 
+    </label>      <br />
     <label className="category-label">
         <input
         type="checkbox"
         name="categories"
-        value="Mansion"
+        value="Double Bed"
         onChange={handleCategoryChange}
         />
-        Mansion
-    </label><br />
-    <label className="category-label">
-    <input
-    type="checkbox"
-    name="categories"
-    value="Studio"
-    onChange={handleCategoryChange}
-    />
-    Studio
-</label>
-<br />
-<label className="category-label">
-    <input
-    type="checkbox"
-    name="categories"
-    value="Penthouse"
-    onChange={handleCategoryChange}
-    />
-    Penthouse
-    </label>
-    <br />
+        Double Bed
+    </label>      <br />
     <label className="category-label">
         <input
         type="checkbox"
         name="categories"
-        value="Duplex"
+        value="Work Area"
         onChange={handleCategoryChange}
         />
-        Duplex
-        </label>
-    <br />
+        Work Area
+    </label>      <br />
     <label className="category-label">
         <input
         type="checkbox"
         name="categories"
-        value="Townhouse"
+        value=""
         onChange={handleCategoryChange}
         />
-        Townhouse
-    </label>
-    <br />
-    <label className="category-label">
-        <input
-        type="checkbox"
-        name="categories"
-        value="Loft"
-        onChange={handleCategoryChange}
-        />
-        Loft
-    </label>
-    <br />
-    <label className="category-label">
-        <input
-        type="checkbox"
-        name="categories"
-        value="Cabin"
-        onChange={handleCategoryChange}
-        />
-        Cabin
-    </label>
-    <br />
-    <label className="category-label">
-        <input
-        type="checkbox"
-        name="categories"
-        value="Farmhouse"
-        onChange={handleCategoryChange}
-        />
-        Farmhouse
-    </label>
-    <br />
+        Three Room
+    </label>      
     </div>
     <br></br>
 
