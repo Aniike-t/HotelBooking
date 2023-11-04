@@ -118,8 +118,17 @@ const RoomDetail = () => {
       checkInDate.setHours(0, 0, 0, 0);
       checkOutDate.setHours(0, 0, 0, 0);
   
-      if (checkInDate <= existingCheckOut && checkOutDate >= existingCheckIn) {
+      if (checkInDate <= existingCheckIn && checkOutDate >= existingCheckOut) {
+        
+        console.log(checkInDate);
+        console.log(existingCheckIn);
+        console.log(checkInDate<=existingCheckIn);
+        console.log(checkOutDate);
+        console.log(existingCheckOut);
+        console.log(checkOutDate >= existingCheckOut);
+        console.log(checkInDate <= existingCheckIn && checkOutDate >= existingCheckOut);
         console.log("Conflict found");
+        
         return false;
       }
     }

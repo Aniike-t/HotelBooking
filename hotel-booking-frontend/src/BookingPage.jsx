@@ -139,6 +139,7 @@ const BookingPage = () => {
         .post(`http://localhost:5000/create-transaction/${roomID}`, TransactionData)
         .then((transactionResponse) => {
           console.log('Transaction created:', transactionResponse.data);
+          alert("Booking Confirmed");
           CallProfile()
           
         })
