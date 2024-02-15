@@ -142,7 +142,7 @@ function LandingPage() {
                             </div>
 
                             <div className="col-lg-3 mb-3" style={{paddingLeft:"140px"}}>
-                                <a id="link" href="/">Rooms</a>
+                                <a id="link" href="/allHotels">Rooms</a>
                             </div>
 
                         </div>
@@ -169,6 +169,10 @@ function LandingPage() {
                                 <h2>FEATURED</h2>
                                 <h2>HOTELS</h2>
                             </div>
+                        </div>
+                        <div id="cardcon" class="col-lg-3 col-md-6 ny-3">
+
+                            
                         </div>
 
 

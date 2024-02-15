@@ -199,7 +199,7 @@ const BookingPage = () => {
               type="checkbox"
               checked={breakfast}
               onChange={handleBreakfastChange}
-            /> Breakfast
+            /> Breakfast Rs.500/day
           </label>
           <br />
           <label>
@@ -207,7 +207,7 @@ const BookingPage = () => {
               type="checkbox"
               checked={lunch}
               onChange={handleLunchChange}
-            /> Lunch
+            /> Lunch Rs.500/day
           </label>
           <br />
           <label>
@@ -215,7 +215,7 @@ const BookingPage = () => {
               type="checkbox"
               checked={dinner}
               onChange={handleDinnerChange}
-            /> Dinner
+            /> Dinner Rs.500/day
           </label>
         </div>
 

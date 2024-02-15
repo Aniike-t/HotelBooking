@@ -163,7 +163,7 @@ const RoomDetail = () => {
             </div>
           <div>
 
-          <h4 style={{marginTop:"30px", fontSize:"24px", fontWeight:"bold"}}>Place to stay hosted by {room.owner} </h4>
+          <h4 style={{marginTop:"30px", fontSize:"24px", fontWeight:"bold"}}>Place to stay hosted by Our Hotel </h4>
           <br />
 
           <div>

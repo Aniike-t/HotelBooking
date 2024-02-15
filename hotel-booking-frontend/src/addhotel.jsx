@@ -178,6 +178,7 @@ const RoomForm = () => {
         if (response.ok) {
           alert("Room Added Successfully");
           console.log('Room added successfully');
+          alert("room added")
           navigate('/')
         } else {
           console.error('Error:', response.statusText);

@@ -3,7 +3,6 @@ const cors = require('cors');
 const mongoose =require('mongoose');
 const app = express();
 const port = 5000;
-const bcrypt = require('bcrypt');
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
@@ -28,7 +27,7 @@ app.post('/signup', userController.signup);
 app.post('/login', userController.login);
 
 
-mongoose.connect('mongodb+srv://Aniket:Aryan7738@cluster0.w8e5wlw.mongodb.net/your_database', {
+mongoose.connect('{{YOUR DATABASE LINK}}', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
