@@ -30,6 +30,6 @@
 
 ![ss5](video/ss5.png) <br>
 
-<video controls src="video/AppRecording.mp4" title="video">VIDEO</video>
+- VIDEO IS AVAILABLE IN VIDEO FOLDER
 
 
