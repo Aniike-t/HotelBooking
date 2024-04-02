@@ -3,7 +3,7 @@
 ##### Contributers:
 
 - Nirmiti Rane ([@nirmitirane24](https://github.com/nirmitirane24)) <br>
-- Pranav Patil 
+- Pranav Patil ([@pranavpatil637](https://github.com/pranavpatil637))
 
 
 ### How to run this app ?
